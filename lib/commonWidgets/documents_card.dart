@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:smart_kagaj/commonWidgets/smooth_navigation.dart';
 import '../constant/colors.dart';
 import '../constant/fonts.dart';
 
