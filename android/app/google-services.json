@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1029151780611",
+    "project_id": "kuhackfest2023-55b05",
+    "storage_bucket": "kuhackfest2023-55b05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1029151780611:android:91163b138a9abe6abe8336",
+        "android_client_info": {
+          "package_name": "com.example.smart_kagaj"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7nRuqMAk9NFS1Ia99xFUiiuFHzSrpw8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

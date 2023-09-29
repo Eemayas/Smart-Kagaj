@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
@@ -30,11 +31,51 @@ class _LogInSignUpState extends State<LogInSignUp> {
 
   _navigateToTermsAndConditions() {}
 
-  _logIn() async {}
+  _logIn() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
 
-  _signUp() {
-    Navigator.of(context)
-        .push(SmoothSlidePageRoute(page: const UserDetailEntryPage()));
+    try {} catch (e) {}
+  }
+
+  Future<void> _signUp(BuildContext context) async {
+    print(
+        "${emailController.text}  ${passwordController.text}  ${confirmPasswordController.text}  ");
+    // EasyLoading.show(
+    //   status: 'Processing...',
+    //   maskType: EasyLoadingMaskType.black,
+    // );
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      // Add a listener to handle user authentication state changes
+      FirebaseAuth.instance.authStateChanges().listen((User? user) {
+        if (user == null) {
+          print('User is currently signed out!');
+        } else {
+          print('User is signed in!');
+        }
+      });
+      // spsush(SmoothSlidePageRoute(page: UserDetailEntryPage()));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        customSnackbar(context: context, text: 'No user found for that email.');
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        customSnackbar(
+            context: context, text: 'Wrong password provided for that user.');
+        print('Wrong password provided for that user.');
+      } else {
+        customSnackbar(context: context, text: e.code);
+        print(e);
+      }
+    }
+
+    // EasyLoading.dismiss();
   }
 
   @override
@@ -191,14 +232,14 @@ class _LogInSignUpState extends State<LogInSignUp> {
                             context: context,
                             icons: Icons.error,
                             iconsColor: Colors.red,
-                            text: 'Plese Fill the Email',
+                            text: 'Please Fill the Email',
                           );
                         } else if (passwordController.text.isEmpty) {
                           customSnackbar(
                             context: context,
                             icons: Icons.error,
                             iconsColor: Colors.red,
-                            text: 'Plese input Password',
+                            text: 'Please input Password',
                           );
                         } else if (!isLogIn &&
                             confirmPasswordController.text.isEmpty) {
@@ -206,7 +247,7 @@ class _LogInSignUpState extends State<LogInSignUp> {
                             context: context,
                             icons: Icons.error,
                             iconsColor: Colors.red,
-                            text: 'Plese input Confirm Password',
+                            text: 'Please input Confirm Password',
                           );
                         } else if (!isLogIn &&
                             (confirmPasswordController.text !=
@@ -218,7 +259,7 @@ class _LogInSignUpState extends State<LogInSignUp> {
                               text:
                                   'Password and Confirm Password Doesnot Match');
                         } else {
-                          isLogIn ? _logIn() : _signUp();
+                          isLogIn ? _logIn() : _signUp(context);
                         }
                       });
                     },

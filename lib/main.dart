@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_kagaj/constant/colors.dart';
+import 'package:smart_kagaj/pages/login_signup_page.dart';
 import 'package:smart_kagaj/pages/setup_MPIN_pages.dart';
 import 'constant/fonts.dart';
 import 'pages/dashboard_page.dart';
@@ -9,7 +11,10 @@ import 'pages/entry_point.dart';
 import 'pages/notice_list_page.dart';
 import 'pages/notice_page.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(const MyApp());
   configLoading();
 }

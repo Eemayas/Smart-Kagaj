@@ -40,6 +40,12 @@ dependencies:
   lottie: ^2.6.0
   intl: ^0.18.1
   image_picker: ^1.0.4
+
+  cloud_firestore: ^4.9.1
+  firebase_auth: ^4.9.0
+  firebase_core: ^2.15.1
+  firebase_storage: ^11.2.6
+
   pinput: ^3.0.1
   flutter_easyloading: ^3.0.5
   url_launcher: ^6.1.14
