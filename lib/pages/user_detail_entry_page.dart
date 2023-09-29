@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -8,9 +10,9 @@ import 'package:smart_kagaj/commonWidgets/custom_snackbar.dart';
 import 'package:smart_kagaj/commonWidgets/input_filed.dart';
 import 'package:smart_kagaj/commonWidgets/onboarding_background.dart';
 import 'package:image_picker/image_picker.dart';
-import 'commonWidgets/date_Input_field.dart';
-import 'constant/colors.dart';
-import 'constant/fonts.dart';
+import '../commonWidgets/date_Input_field.dart';
+import '../constant/colors.dart';
+import '../constant/fonts.dart';
 
 class UserDetailEntryPage extends StatefulWidget {
   const UserDetailEntryPage({super.key});
@@ -35,7 +37,6 @@ class _UserDetailEntryPageState extends State<UserDetailEntryPage> {
     super.initState();
     userNameController.addListener(() => setState(() {}));
     phoneNumberController.addListener(() => setState(() {}));
-    // dateController.addListener(() => setState(() {}));
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -104,7 +105,7 @@ class _UserDetailEntryPageState extends State<UserDetailEntryPage> {
                                 onPressed: _pickImage,
                                 child: Text(
                                   'Select Image',
-                                  style: kwhiteTextStyle,
+                                  style: kblackTextStyle,
                                 ),
                               ),
                             ],

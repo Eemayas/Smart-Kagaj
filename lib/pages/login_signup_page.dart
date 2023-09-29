@@ -7,10 +7,10 @@ import 'package:smart_kagaj/commonWidgets/smooth_navigation.dart';
 import 'package:smart_kagaj/commonWidgets/toggle_button.dart';
 import 'package:smart_kagaj/constant/colors.dart';
 import 'package:smart_kagaj/constant/fonts.dart';
-import 'package:smart_kagaj/user_detail_entry_page.dart';
-
-import 'commonWidgets/input_filed.dart';
+import '../commonWidgets/input_filed.dart';
 import 'package:lottie/lottie.dart';
+
+import 'user_detail_entry_page.dart';
 
 class LogInSignUp extends StatefulWidget {
   const LogInSignUp({Key? key}) : super(key: key);

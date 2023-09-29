@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_kagaj/constant/colors.dart';
-import 'package:smart_kagaj/introduction_page.dart';
-import 'package:smart_kagaj/user_detail_entry_page.dart';
+
+import 'pages/user_detail_entry_page.dart';
 
 void main() {
   runApp(const MyApp());

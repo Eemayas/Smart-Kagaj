@@ -15,6 +15,10 @@ TextStyle kwhiteTextStyle = GoogleFonts.quicksand(
   textStyle:
       const TextStyle(letterSpacing: 1, fontSize: 15, color: Color(0xffF2F2F2)),
 );
+TextStyle kblackTextStyle = GoogleFonts.quicksand(
+  textStyle:
+      const TextStyle(letterSpacing: 1, fontSize: 15, color: Colors.black),
+);
 
 TextStyle kwhitesubTextStyle = GoogleFonts.quicksand(
   textStyle: const TextStyle(letterSpacing: 1, color: Color(0xffBDBDBD)),

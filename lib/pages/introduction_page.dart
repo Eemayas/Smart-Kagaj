@@ -7,7 +7,7 @@ import 'package:smart_kagaj/commonWidgets/onboarding_background.dart';
 import 'package:smart_kagaj/commonWidgets/smooth_navigation.dart';
 import 'package:smart_kagaj/constant/data.dart';
 import 'package:smart_kagaj/constant/fonts.dart';
-import 'package:smart_kagaj/login_signup_page.dart';
+import 'login_signup_page.dart';
 
 class IntroductionPage extends StatefulWidget {
   const IntroductionPage({Key? key}) : super(key: key);
