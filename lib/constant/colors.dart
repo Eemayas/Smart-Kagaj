@@ -4,6 +4,9 @@ const Color kBackgroundColor = Color(0xff1E1E1E);
 const Color kBackgroundColorAppBar = Color.fromARGB(255, 43, 41, 50);
 const Color kBackgroundColorCard = Color(0xff191928);
 
+const Color kBoxShadowGreen = Color(0x7F008000);
+const Color kBoxShadowRed = Color(0x7FFF0000);
+
 BoxDecoration buildGradientBorder() {
   return BoxDecoration(
     // shape: BoxShape.circle,
