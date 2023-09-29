@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
 import 'package:smart_kagaj/commonWidgets/onboarding_background.dart';
 import 'package:smart_kagaj/commonWidgets/smooth_navigation.dart';
+import 'package:smart_kagaj/constant/data.dart';
 import 'package:smart_kagaj/constant/fonts.dart';
 import 'package:smart_kagaj/login_signup_page.dart';
 
@@ -49,11 +50,11 @@ class _IntroductionPageState extends State<IntroductionPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Welcome \nTo",
+                      Text("Welcome To",
                           style: kwhiteTextStyle.copyWith(
                               fontSize: 20, fontWeight: FontWeight.w800)),
                       Text(
-                        "eGovernance",
+                        "Smart Kagaj",
                         style: kwhiteboldTextStyle.copyWith(fontSize: 35),
                       ),
                       const SizedBox(
@@ -65,8 +66,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                                 0.6, // Set your desired maximum width here
                           ),
                           child: Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel egestas dolor, nec dignissim metus. Donec augue elit, rhoncus ac sodales id, porttitor vitae est. Donec laoreet rutrum libero sed pharetra.",
-                            // textAlign: TextAlign.justify,
+                            introductionDescription, // textAlign: TextAlign.justify,
                             style: kwhiteTextStyle.copyWith(
                                 fontSize: 15, fontWeight: FontWeight.w600),
                           )),

@@ -1,10 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
+import 'package:smart_kagaj/commonWidgets/custom_snackbar.dart';
 import 'package:smart_kagaj/commonWidgets/onboarding_background.dart';
+import 'package:smart_kagaj/commonWidgets/smooth_navigation.dart';
 import 'package:smart_kagaj/commonWidgets/toggle_button.dart';
 import 'package:smart_kagaj/constant/colors.dart';
 import 'package:smart_kagaj/constant/fonts.dart';
+import 'package:smart_kagaj/user_detail_entry_page.dart';
 
 import 'commonWidgets/input_filed.dart';
 import 'package:lottie/lottie.dart';
@@ -29,7 +32,10 @@ class _LogInSignUpState extends State<LogInSignUp> {
 
   _logIn() async {}
 
-  _SignUp() {}
+  _signUp() {
+    Navigator.of(context)
+        .push(SmoothSlidePageRoute(page: const UserDetailEntryPage()));
+  }
 
   @override
   void initState() {
@@ -177,7 +183,45 @@ class _LogInSignUpState extends State<LogInSignUp> {
                   ),
                   RiveAnimatedBtn(
                     label: isLogIn ? "Log In" : "Sign In",
-                    onTap: () {},
+                    onTap: () {
+                      Future.delayed(const Duration(milliseconds: 800), () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        if (emailController.text.isEmpty) {
+                          customSnackbar(
+                            context: context,
+                            icons: Icons.error,
+                            iconsColor: Colors.red,
+                            text: 'Plese Fill the Email',
+                          );
+                        } else if (passwordController.text.isEmpty) {
+                          customSnackbar(
+                            context: context,
+                            icons: Icons.error,
+                            iconsColor: Colors.red,
+                            text: 'Plese input Password',
+                          );
+                        } else if (!isLogIn &&
+                            confirmPasswordController.text.isEmpty) {
+                          customSnackbar(
+                            context: context,
+                            icons: Icons.error,
+                            iconsColor: Colors.red,
+                            text: 'Plese input Confirm Password',
+                          );
+                        } else if (!isLogIn &&
+                            (confirmPasswordController.text !=
+                                passwordController.text)) {
+                          customSnackbar(
+                              context: context,
+                              icons: Icons.error,
+                              iconsColor: Colors.red,
+                              text:
+                                  'Password and Confirm Password Doesnot Match');
+                        } else {
+                          isLogIn ? _logIn() : _signUp();
+                        }
+                      });
+                    },
                     iconData: const Icon(
                       Icons.login_sharp,
                       color: Colors.black,
