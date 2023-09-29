@@ -51,12 +51,12 @@ class AnimatedBtn extends StatelessWidget {
 }
 
 class RiveAnimatedBtn extends StatefulWidget {
-  const RiveAnimatedBtn(
-      {Key? key,
-      required this.label,
-      required this.onTap,
-      required this.iconData})
-      : super(key: key);
+  const RiveAnimatedBtn({
+    Key? key,
+    required this.label,
+    required this.iconData,
+    required this.onTap,
+  }) : super(key: key);
   final String label;
   final Function onTap;
   final Icon iconData;

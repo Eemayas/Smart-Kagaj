@@ -1,18 +1,23 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'dart:io';
-import 'dart:typed_data';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
-import 'package:smart_kagaj/commonWidgets/custom_snackbar.dart';
-import 'package:smart_kagaj/commonWidgets/input_filed.dart';
-import 'package:smart_kagaj/commonWidgets/onboarding_background.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:smart_kagaj/commonWidgets/smooth_navigation.dart';
+import 'package:smart_kagaj/database/firebase.dart';
+import '../commonWidgets/custom_snackbar.dart';
 import '../commonWidgets/date_Input_field.dart';
+import '../commonWidgets/input_filed.dart';
+import '../commonWidgets/onboarding_background.dart';
+import '../commonWidgets/uploadImageToFirebase.dart';
 import '../constant/colors.dart';
 import '../constant/fonts.dart';
+import 'citizenship_entry_page.dart';
 
 class UserDetailEntryPage extends StatefulWidget {
   const UserDetailEntryPage({super.key});
@@ -26,17 +31,60 @@ class _UserDetailEntryPageState extends State<UserDetailEntryPage> {
   final userNameController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final dateController = TextEditingController();
+  User user = FirebaseAuth.instance.currentUser!;
+
   File? _selectedImage;
   Uint8List? _image;
-  _addUserData() async {}
 
-  Future<void> _uploadImageThenDataUpload() async {}
+  // Future<void> _addUserData() async {
+  //   FirebaseDB.userName = userNameController.text;
+  //   FirebaseDB.phoneNumber = phoneNumberController.text;
+  //   FirebaseDB.dateOfBirth = dateController.text;
+  //   FirebaseDB.printall();
+  //   Navigator.of(context)
+  //       .push(SmoothSlidePageRoute(page: const CitizenshipEntryPage()));
+  // }
+
+  Future<void> _uploadImageThenDataUpload() async {
+    EasyLoading.show(
+      status: 'Processing...',
+      maskType: EasyLoadingMaskType.black,
+    );
+    try {
+      String userId = user.uid;
+      String? imageUrl =
+          await uploadImageToFirebase(_image!, userId, "ProfileImage");
+      print(imageUrl);
+      if (imageUrl != null) {
+        FirebaseDB.userName = userNameController.text;
+        FirebaseDB.phoneNumber = phoneNumberController.text;
+        FirebaseDB.dateOfBirth = dateController.text;
+        FirebaseDB.profileImageURL = imageUrl;
+        FirebaseDB.printall();
+        Navigator.of(context)
+            .push(SmoothSlidePageRoute(page: const CitizenshipEntryPage()));
+      } else {
+        print("Error: Image URL is null");
+        customSnackbar(context: context, text: "Error: Image URL is null");
+      }
+    } catch (e) {
+      print("ERROR UPLOADING PROFILE IMAGE : $e");
+      customSnackbar(
+          context: context, text: "ERROR UPLOADING PROFILE IMAGE : $e");
+    }
+    EasyLoading.dismiss();
+  }
 
   @override
   void initState() {
     super.initState();
     userNameController.addListener(() => setState(() {}));
     phoneNumberController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -105,7 +153,7 @@ class _UserDetailEntryPageState extends State<UserDetailEntryPage> {
                                 onPressed: _pickImage,
                                 child: Text(
                                   'Select Image',
-                                  style: kblackTextStyle,
+                                  style: kwhiteTextStyle,
                                 ),
                               ),
                             ],
@@ -159,10 +207,6 @@ class _UserDetailEntryPageState extends State<UserDetailEntryPage> {
                         ),
                         RiveAnimatedBtn(
                           label: "Proceed",
-                          iconData: const Icon(
-                            Icons.login_sharp,
-                            color: Colors.black,
-                          ),
                           onTap: () {
                             Future.delayed(const Duration(milliseconds: 800),
                                 () {
@@ -194,7 +238,11 @@ class _UserDetailEntryPageState extends State<UserDetailEntryPage> {
                               }
                             });
                           },
-                        ),
+                          iconData: const Icon(
+                            Icons.login_sharp,
+                            color: Colors.black,
+                          ),
+                        )
                       ],
                     ),
                   ),

@@ -1,16 +1,23 @@
-// ignore_for_file: prefer_const_constructors, must_be_immutable, avoid_print, use_build_context_synchronously, unused_field
+// ignore_for_file: prefer_const_constructors, must_be_immutable, avoid_print, use_build_context_synchronously
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
-import 'package:smart_kagaj/commonWidgets/animated_button.dart';
-import 'package:smart_kagaj/commonWidgets/onboarding_background.dart';
+import 'package:rive/rive.dart';
+import '../commonWidgets/animated_button.dart';
 import '../commonWidgets/custom_snackbar.dart';
 import '../commonWidgets/date_Input_field.dart';
 import '../commonWidgets/input_filed.dart';
+import '../commonWidgets/onboarding_background.dart';
+import '../commonWidgets/smooth_navigation.dart';
+import '../commonWidgets/uploadImageToFirebase.dart';
 import '../constant/colors.dart';
 import '../constant/fonts.dart';
+import '../database/firebase.dart';
+import 'setup_MPIN_pages.dart';
 
 class CitizenshipEntryPage extends StatefulWidget {
   const CitizenshipEntryPage({super.key});
@@ -22,6 +29,9 @@ class CitizenshipEntryPage extends StatefulWidget {
 class _CitizenshipEntryPageState extends State<CitizenshipEntryPage> {
   final citizenshipNumberController = TextEditingController();
   final dateController = TextEditingController();
+
+  User user = FirebaseAuth.instance.currentUser!;
+  late RiveAnimationController _btnAnimationController;
   String? imageUrl;
   File? _selectedImage;
   File? image;
@@ -51,17 +61,52 @@ class _CitizenshipEntryPageState extends State<CitizenshipEntryPage> {
 
   @override
   void dispose() {
+    _btnAnimationController.dispose();
     citizenshipNumberController.dispose();
     dateController.dispose();
     super.dispose();
   }
 
-  _uploadImageThenDataUpload() {}
+  Future<void> _uploadImageThenDataUpload() async {
+    EasyLoading.show(
+      status: 'Processing...',
+      maskType: EasyLoadingMaskType.black,
+    );
+    try {
+      String userId = user.uid;
+      String? imageUrl =
+          await uploadImageToFirebase(_image!, userId, "Citizenship");
+      print(imageUrl);
+      if (imageUrl != null) {
+        FirebaseDB.citizenshipImageURL = imageUrl;
+        FirebaseDB.citizenshipNumber = citizenshipNumberController.text;
+        FirebaseDB.citizenshipIssuedDate = dateController.text;
+        FirebaseDB.printall();
+        if (await FirebaseDB.uploadPersonalDetail(
+            context: context, userUid: user.uid)) {
+          Navigator.of(context).push(SmoothSlidePageRoute(page: SetupMPIN()));
+        }
+      } else {
+        print("Error: Image URL is null");
+        customSnackbar(context: context, text: "Error: Image URL is null");
+      }
+    } catch (e) {
+      print("ERROR UPLOADING PROFILE IMAGE : $e");
+      customSnackbar(
+          context: context, text: "ERROR UPLOADING PROFILE IMAGE : $e");
+    }
+    EasyLoading.dismiss();
+  }
 
   @override
   void initState() {
     super.initState();
+    _btnAnimationController = OneShotAnimation(
+      "active",
+      autoplay: false,
+    );
     citizenshipNumberController.addListener(() => setState(() {}));
+    // dateController.addListener(() => setState(() {}));
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -104,9 +149,15 @@ class _CitizenshipEntryPageState extends State<CitizenshipEntryPage> {
                                         child: Image.file(
                                           _selectedImage!,
                                           fit: BoxFit.cover,
+                                          // width: double.infinity, // Match image width
+                                          // height: double.infinity, // Match image height
                                         ),
                                       ),
                                     )
+                                  // Image.file(
+                                  //     _selectedImage!,
+                                  //     // height: 200,
+                                  //   )
                                   : SizedBox(
                                       height: 200,
                                       child: Lottie.asset(
@@ -116,7 +167,7 @@ class _CitizenshipEntryPageState extends State<CitizenshipEntryPage> {
                               onPressed: _pickImage,
                               child: Text(
                                 'Select Document',
-                                style: kblackTextStyle,
+                                style: kwhiteTextStyle,
                               ),
                             ),
                           ],
@@ -148,6 +199,10 @@ class _CitizenshipEntryPageState extends State<CitizenshipEntryPage> {
                         ),
                         RiveAnimatedBtn(
                           label: "Proceed",
+                          iconData: Icon(
+                            Icons.login_sharp,
+                            color: Colors.black,
+                          ),
                           onTap: () {
                             Future.delayed(const Duration(milliseconds: 800),
                                 () {
@@ -172,10 +227,6 @@ class _CitizenshipEntryPageState extends State<CitizenshipEntryPage> {
                               }
                             });
                           },
-                          iconData: Icon(
-                            Icons.login_sharp,
-                            color: Colors.black,
-                          ),
                         )
                       ],
                     ),

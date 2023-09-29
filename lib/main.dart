@@ -1,10 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_kagaj/constant/colors.dart';
+import 'package:smart_kagaj/pages/entry_point.dart';
 import 'package:smart_kagaj/pages/introduction_page.dart';
-import 'package:smart_kagaj/pages/login_signup_page.dart';
 import 'constant/fonts.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+import 'pages/citizenship_entry_page.dart';
+import 'pages/user_detail_entry_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +38,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const IntroductionPage());
+        home: const EntryPoint());
   }
 }
 
