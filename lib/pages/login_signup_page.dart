@@ -53,7 +53,7 @@ class _LogInSignUpState extends State<LogInSignUp> {
             "${emailController.text}  ${passwordController.text} ${confirmPasswordController.text} "),
         FocusScope.of(context).requestFocus(FocusNode())
       },
-      child: OnbordingBackgroung(
+      child: OnbodingScreenBackground(
         inputWidgets: SingleChildScrollView(
           child: SafeArea(
               child: Padding(

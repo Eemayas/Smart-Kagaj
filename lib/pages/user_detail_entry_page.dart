@@ -62,7 +62,7 @@ class _UserDetailEntryPageState extends State<UserDetailEntryPage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => {FocusScope.of(context).requestFocus(FocusNode())},
-      child: OnbordingBackgroung(
+      child: OnbodingScreenBackground(
         inputWidgets: SingleChildScrollView(
           child: SafeArea(
             child: Padding(

@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 
-class OnbordingBackgroung extends StatelessWidget {
-  const OnbordingBackgroung({super.key, required this.inputWidgets});
+class OnbodingScreenBackground extends StatelessWidget {
+  const OnbodingScreenBackground({super.key, required this.inputWidgets});
   static String id = 'OnbordingBackgroung_id';
   final Widget inputWidgets;
   @override

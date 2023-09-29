@@ -37,7 +37,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return OnbordingBackgroung(
+    return OnbodingScreenBackground(
       inputWidgets: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),

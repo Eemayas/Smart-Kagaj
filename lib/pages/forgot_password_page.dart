@@ -36,7 +36,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         print("${emailController.text} "),
         FocusScope.of(context).requestFocus(FocusNode())
       },
-      child: OnbordingBackgroung(
+      child: OnbodingScreenBackground(
         inputWidgets: SafeArea(
             child: SingleChildScrollView(
           child: Padding(
