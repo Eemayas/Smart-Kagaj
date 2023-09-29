@@ -1,40 +1,56 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:smart_kagaj/commonWidgets/animated_button.dart';
-import 'package:smart_kagaj/commonWidgets/documents_card.dart';
+import 'package:flutter/material.dart';
+import 'package:smart_kagaj/pages/dashboard_page.dart';
+import '../commonWidgets/animated_button.dart';
+import '../commonWidgets/documents_card.dart';
 import '../commonWidgets/greeting_card.dart';
-import '../commonWidgets/notice_card.dart';
-import '../commonWidgets/smooth_navigation.dart';
 import '../constant/colors.dart';
-import '../constant/data.dart';
 import '../constant/fonts.dart';
 import '../database/documents.dart';
-import 'documen_list_page.dart';
 
-class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key});
-  static String userName = "Prashants";
+class DocumentListPage extends StatefulWidget {
+  const DocumentListPage({super.key});
+  static String id = 'DocumentListPage_id';
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  State<DocumentListPage> createState() => _DocumentListPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _DocumentListPageState extends State<DocumentListPage> {
   User user = FirebaseAuth.instance.currentUser!;
+
   @override
   Widget build(BuildContext context) {
+    DocumentDB.clear();
     return Scaffold(
         appBar: AppBar(
           backgroundColor: kBackgroundColorAppBar,
           title: Text(
-            "Dashboard",
+            "Documents",
             style: kwhiteTextStyle,
           ),
           actions: [
-            IconButton(icon: const Icon(Icons.more_vert), onPressed: () => {}),
+            IconButton(icon: Icon(Icons.more_vert), onPressed: () => {}),
           ],
         ),
+        floatingActionButton: RiveAnimatedBtn(
+          iconData: Icon(
+            Icons.create_new_folder,
+            color: Colors.black,
+          ),
+          label: 'Add Document',
+          onTap: () async {
+            final result = await showCreateDialog(context: context, user: user);
+            if (result != null) {
+              DocumentDB.documentsNameList.add(result);
+              setState(() {});
+            }
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: SingleChildScrollView(
@@ -43,24 +59,8 @@ class _DashboardPageState extends State<DashboardPage> {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               GreetingUser(userName: DashboardPage.userName),
-              const SizedBox(
+              SizedBox(
                 height: 20,
-              ),
-              Text(
-                "Notices..",
-                style: kwhiteTextStyle.copyWith(fontSize: 20),
-              ),
-              NoticeCard(
-                noticeTitle: noticeList[0]["noticeTitle"],
-                noticeURL: noticeList[0]["noticeURL"],
-                publishedDate: noticeList[0]["publishedDate"],
-                noticeDescription: noticeList[0]["noticeDescription"],
-                noticePublishedBy: noticeList[0]["noticePublishedBy"],
-                noticeImgURL: noticeList[0]["noticeImgURL"],
-                isDashBoard: true,
-              ),
-              const SizedBox(
-                height: 30,
               ),
               Text(
                 "Documents",
@@ -78,7 +78,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       status: 'Processing...',
                       maskType: EasyLoadingMaskType.black,
                     );
-                    return const CircularProgressIndicator();
+                    return CircularProgressIndicator();
                   } else if (snapshot.hasError) {
                     // Handle any errors that occur during data fetching.
                     return Text('Error: ${snapshot.error}');
@@ -90,17 +90,14 @@ class _DashboardPageState extends State<DashboardPage> {
                     // final documentNames = snapshot.data ?? [];
                     return GridView.builder(
                       shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         mainAxisSpacing: 10.0,
                         crossAxisSpacing: 10.0,
                         childAspectRatio: 0.99,
                       ),
-                      itemCount: DocumentDB.documentsNameList.length > 4
-                          ? 4
-                          : DocumentDB.documentsNameList.length,
+                      itemCount: DocumentDB.documentsNameList.length,
                       itemBuilder: (BuildContext context, int i) {
                         return DocumentsCards(
                           onDelete: () async {
@@ -130,28 +127,53 @@ class _DashboardPageState extends State<DashboardPage> {
                   }
                 },
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0, top: 30),
-                    child: RiveAnimatedBtn(
-                      label: "View more documents",
-                      onTap: () {
-                        Future.delayed(const Duration(milliseconds: 800),
-                            () async {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          Navigator.of(context).push(SmoothSlidePageRoute(
-                              page: const DocumentListPage()));
-                        });
-                      },
-                      iconData: const Icon(
-                        Icons.arrow_right_alt,
-                        color: Colors.black,
-                      ),
-                    )),
-              ),
+              SizedBox(
+                height: 100,
+              )
             ]),
           )),
         ));
   }
+}
+
+Future<String?> showCreateDialog(
+    {required BuildContext context, required user, text = ""}) async {
+  final contractNameController = TextEditingController();
+  contractNameController.text = text;
+  return showDialog<String>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Create Folder'),
+        content: TextField(
+          controller: contractNameController,
+          decoration: InputDecoration(
+            hintText: 'Enter something',
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text(text == "" ? 'Create' : "Edit"),
+            onPressed: () async {
+              if (contractNameController.text.isNotEmpty) {
+                if (await DocumentDB.addDocumentToListInFirestore(
+                    userUid: user.uid,
+                    context: context,
+                    newDocument: contractNameController.text)) {
+                  DocumentDB.newDocumentName = contractNameController.text;
+                  Navigator.of(context).pop(contractNameController.text);
+                }
+              }
+            },
+          ),
+          TextButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop(null);
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
