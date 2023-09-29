@@ -5,6 +5,10 @@ import 'constant/fonts.dart';
 import 'pages/dashboard_page.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import 'pages/entry_point.dart';
+import 'pages/notice_list_page.dart';
+import 'pages/notice_page.dart';
+
 void main() {
   runApp(const MyApp());
   configLoading();
@@ -31,7 +35,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const SetupMPIN());
+        home: const EntryPoint());
   }
 }
 
