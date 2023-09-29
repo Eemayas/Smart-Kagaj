@@ -50,8 +50,6 @@ class AnimatedBtn extends StatelessWidget {
   }
 }
 
-//import 'package:flutter/material.dart';
-
 class RiveAnimatedBtn extends StatefulWidget {
   const RiveAnimatedBtn(
       {Key? key,
