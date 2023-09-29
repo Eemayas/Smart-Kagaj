@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   rive: ^0.11.17
   google_fonts: ^6.1.0
+  lottie: ^2.6.0
 
 dev_dependencies:
   flutter_test:
@@ -54,3 +55,4 @@ flutter:
     - assets/
     - assets/Backgrounds/
     - assets/RiveAssets/
+    - assets/Lottie/

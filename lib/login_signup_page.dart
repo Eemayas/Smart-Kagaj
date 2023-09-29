@@ -1,12 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_kagaj/commonWidgets/animated_button.dart';
 import 'package:smart_kagaj/commonWidgets/onboarding_background.dart';
 import 'package:smart_kagaj/commonWidgets/toggle_button.dart';
 import 'package:smart_kagaj/constant/colors.dart';
 import 'package:smart_kagaj/constant/fonts.dart';
 
 import 'commonWidgets/input_filed.dart';
-// import 'package:lottie/lottie.dart';
+import 'package:lottie/lottie.dart';
 
 class LogInSignUp extends StatefulWidget {
   const LogInSignUp({Key? key}) : super(key: key);
@@ -55,11 +56,12 @@ class _LogInSignUpState extends State<LogInSignUp> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // SizedBox(
-                  //     height: MediaQuery.of(context).size.height * 0.28,
-                  //     child: ClipRRect(
-                  //         borderRadius: BorderRadius.circular(30),
-                  //         child: Lottie.asset("assets/Lottie/login.json"))),
+                  SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.24,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: Lottie.asset("assets/Lottie/login.json"),
+                      )),
                   Text(
                     isLogIn ? "Log In" : "Sign In",
                     style: kwhiteboldTextStyle.copyWith(fontSize: 30),
@@ -173,6 +175,14 @@ class _LogInSignUpState extends State<LogInSignUp> {
                   const SizedBox(
                     height: 20,
                   ),
+                  RiveAnimatedBtn(
+                    label: isLogIn ? "Log In" : "Sign In",
+                    onTap: () {},
+                    iconData: const Icon(
+                      Icons.login_sharp,
+                      color: Colors.black,
+                    ),
+                  )
                 ],
               ),
             ),
