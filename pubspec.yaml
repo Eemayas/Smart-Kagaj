@@ -40,6 +40,9 @@ dependencies:
   lottie: ^2.6.0
   intl: ^0.18.1
   image_picker: ^1.0.4
+  flutter_easyloading: ^3.0.5
+  pinput: ^3.0.1
+  flutter_pin_code_fields: ^2.2.0
 
 dev_dependencies:
   flutter_test:
