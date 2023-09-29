@@ -20,6 +20,21 @@ class SetupMPIN extends StatefulWidget {
 
 class _SetupMPINState extends State<SetupMPIN> {
   late List<TextEditingController> _pinControllers;
+
+  @override
+  void initState() {
+    super.initState();
+    _pinControllers = List.generate(4, (index) => TextEditingController());
+  }
+
+  @override
+  void dispose() {
+    for (var i = 0; i < 4; i++) {
+      _pinControllers[i].dispose();
+    }
+    super.dispose();
+  }
+
   bool isMPIN = true;
   @override
   Widget build(BuildContext context) {
@@ -100,7 +115,6 @@ class _SetupMPINState extends State<SetupMPIN> {
           //         EasyLoading.dismiss();
           //       }
           //     }),
-       
         ],
       ),
     ));
