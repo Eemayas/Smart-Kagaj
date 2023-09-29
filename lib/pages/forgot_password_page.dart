@@ -1,4 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
 import 'package:smart_kagaj/commonWidgets/input_filed.dart';
@@ -19,7 +23,33 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   _resetPassword() async {
+    EasyLoading.show(
+      status: 'Processing...',
+      maskType: EasyLoadingMaskType.black,
+    );
+
     print("${emailController.text} ");
+    if (_formKey.currentState!.validate()) {
+      try {
+        await FirebaseAuth.instance
+            .sendPasswordResetEmail(email: emailController.text);
+        customSnackbar(
+          context: context,
+          text:
+              "Email sent to ${emailController.text}\n Please check your email to reset your password .",
+          icons: Icons.done,
+          iconsColor: Colors.green,
+        );
+      } on FirebaseAuthException catch (e) {
+        customSnackbar(
+          context: context,
+          text: "Something went wrong : ${e.message}",
+          icons: Icons.error,
+          iconsColor: Colors.red,
+        );
+      }
+    }
+    EasyLoading.dismiss();
     Navigator.pop(context);
   }
 
@@ -91,7 +121,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         _resetPassword();
                       }
                     },
-                    iconData: const Icon(Icons.restore, color: Colors.white),
+                    iconData: const Icon(Icons.restore, color: Colors.black),
                   )
                 ],
               ),

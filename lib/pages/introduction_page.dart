@@ -63,7 +63,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                       Container(
                           constraints: BoxConstraints(
                             maxWidth: MediaQuery.of(context).size.width *
-                                0.6, // Set your desired maximum width here
+                                0.7, // Set your desired maximum width here
                           ),
                           child: Text(
                             introductionDescription, // textAlign: TextAlign.justify,

@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
 import 'package:smart_kagaj/commonWidgets/custom_snackbar.dart';
 import 'package:smart_kagaj/commonWidgets/onboarding_background.dart';
@@ -11,6 +14,9 @@ import 'package:smart_kagaj/constant/fonts.dart';
 import '../commonWidgets/input_filed.dart';
 import 'package:lottie/lottie.dart';
 
+import 'entry_point.dart';
+import 'forgot_password_page.dart';
+import 'terms_condition_page.dart';
 import 'user_detail_entry_page.dart';
 
 class LogInSignUp extends StatefulWidget {
@@ -27,24 +33,59 @@ class _LogInSignUpState extends State<LogInSignUp> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  _forgotPassword() {}
+  _forgotPassword() {
+    Navigator.of(context)
+        .push(SmoothSlidePageRoute(page: const ForgotPassword()));
+  }
 
-  _navigateToTermsAndConditions() {}
+  _navigateToTermsAndConditions() {
+    Navigator.of(context)
+        .push(SmoothSlidePageRoute(page: TermsAndConditionsScreen()));
+  }
 
-  _logIn() async {
-    String email = emailController.text.trim();
-    String password = passwordController.text.trim();
-
-    try {} catch (e) {}
+  Future<void> _logIn(BuildContext context) async {
+    print("${emailController.text}  ${passwordController.text}  ");
+    EasyLoading.show(
+      status: 'Processing...',
+      maskType: EasyLoadingMaskType.black,
+    );
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+      FirebaseAuth.instance.authStateChanges().listen((User? user) {
+        if (user == null) {
+          print('User is currently signed out!');
+        } else {
+          print('User is signed in!');
+        }
+      });
+      Navigator.of(context)
+          .push(SmoothSlidePageRoute(page: const EntryPoint()));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        customSnackbar(context: context, text: 'No user found for that email.');
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        customSnackbar(
+            context: context, text: 'Wrong password provided for that user.');
+        print('Wrong password provided for that user.');
+      } else {
+        customSnackbar(context: context, text: e.code);
+        print(e);
+      }
+    }
+    EasyLoading.dismiss();
   }
 
   Future<void> _signUp(BuildContext context) async {
     print(
         "${emailController.text}  ${passwordController.text}  ${confirmPasswordController.text}  ");
-    // EasyLoading.show(
-    //   status: 'Processing...',
-    //   maskType: EasyLoadingMaskType.black,
-    // );
+    EasyLoading.show(
+      status: 'Processing...',
+      maskType: EasyLoadingMaskType.black,
+    );
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -60,7 +101,8 @@ class _LogInSignUpState extends State<LogInSignUp> {
           print('User is signed in!');
         }
       });
-      // spsush(SmoothSlidePageRoute(page: UserDetailEntryPage()));
+      Navigator.of(context)
+          .push(SmoothSlidePageRoute(page: const UserDetailEntryPage()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         customSnackbar(context: context, text: 'No user found for that email.');
@@ -75,7 +117,7 @@ class _LogInSignUpState extends State<LogInSignUp> {
       }
     }
 
-    // EasyLoading.dismiss();
+    EasyLoading.dismiss();
   }
 
   @override
@@ -259,7 +301,7 @@ class _LogInSignUpState extends State<LogInSignUp> {
                               text:
                                   'Password and Confirm Password Doesnot Match');
                         } else {
-                          isLogIn ? _logIn() : _signUp(context);
+                          isLogIn ? _logIn(context) : _signUp(context);
                         }
                       });
                     },

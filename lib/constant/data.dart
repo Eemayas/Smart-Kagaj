@@ -1,5 +1,7 @@
 String introductionDescription =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel egestas dolor, nec dignissim metus. Donec augue elit, rhoncus ac sodales id, porttitor vitae est. Donec laoreet rutrum libero sed pharetra.";
+    '''Welcome to SmartKagaj, where blockchain meets smart contracts to revolutionize contract signing. Our app simplifies, secures, and streamlines the process, digitizing physical agreements with unmatched authenticity. 
+
+Say farewell to paperwork hassles and hello to a future where signing contracts is simple, secure, and smart.''';
 
 final List<Map<String, dynamic>> noticeList = [
   {
