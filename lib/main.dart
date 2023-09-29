@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_kagaj/constant/colors.dart';
 import 'package:smart_kagaj/introduction_page.dart';
 
 void main() {
@@ -13,7 +14,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Smart Kagaj',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          scaffoldBackgroundColor: kBackgroundColor,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
