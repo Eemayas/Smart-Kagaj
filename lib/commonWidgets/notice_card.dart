@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:smart_kagaj/commonWidgets/animated_button.dart';
 
 import '../constant/colors.dart';
 import '../constant/fonts.dart';
+import '../pages/notice_page.dart';
+import 'smooth_navigation.dart';
 
 class NoticeCard extends StatelessWidget {
   final String noticeTitle;
@@ -113,48 +116,28 @@ class NoticeCard extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              const Column(
+              Column(
                 children: [
-                  Divider(
+                  const Divider(
                     thickness: 2,
                     color: Color.fromARGB(255, 135, 135, 135),
                   ),
-                  // ProgressButton.icon(
-                  //     textStyle: kwhiteTextStyle,
-                  //     height: 35.00,
-                  //     iconedButtons: {
-                  //       ButtonState.idle: IconedButton(
-                  //         text: "Read More",
-                  //         icon: const Icon(Icons.arrow_right_alt,
-                  //             color: Colors.white),
-                  //         color: Colors.deepPurple.shade500,
-                  //       ),
-                  //       ButtonState.loading: IconedButton(
-                  //           text: "Loading", color: Colors.deepPurple.shade700),
-                  //       ButtonState.fail: IconedButton(
-                  //           text: "Failed",
-                  //           icon: const Icon(Icons.cancel, color: Colors.white),
-                  //           color: Colors.red.shade300),
-                  //       ButtonState.success: IconedButton(
-                  //           text: "Success",
-                  //           icon: const Icon(
-                  //             Icons.arrow_right_alt,
-                  //             color: Colors.white,
-                  //           ),
-                  //           color: Colors.green.shade400)
-                  //     },
-                  //     onPressed: () => {
-                  //           Navigator.of(context).push(SmoothSlidePageRoute(
-                  //               page: NoticePage(
-                  //             noticeDescription: noticeDescription,
-                  //             noticeImgURL: noticeImgURL,
-                  //             noticePublishedBy: noticePublishedBy,
-                  //             noticeTitle: noticeTitle,
-                  //             noticeURL: noticeURL,
-                  //             publishedDate: publishedDate,
-                  //           )))
-                  //         },
-                  //     state: ButtonState.idle),
+                  RiveAnimatedBtn(
+                    label: "Read More",
+                    onTap: () {
+                      Navigator.of(context).push(SmoothSlidePageRoute(
+                          page: NoticePage(
+                        noticeDescription: noticeDescription,
+                        noticeImgURL: noticeImgURL,
+                        noticePublishedBy: noticePublishedBy,
+                        noticeTitle: noticeTitle,
+                        noticeURL: noticeURL,
+                        publishedDate: publishedDate,
+                      )));
+                    },
+                    iconData:
+                        const Icon(Icons.arrow_right_alt, color: Colors.black),
+                  )
                 ],
               ),
             ],

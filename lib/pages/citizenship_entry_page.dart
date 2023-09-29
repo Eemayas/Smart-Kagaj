@@ -1,10 +1,9 @@
-// ignore_for_file: prefer_const_constructors, must_be_immutable, avoid_print, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, must_be_immutable, avoid_print, use_build_context_synchronously, unused_field
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
-import 'package:rive/rive.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
 import 'package:smart_kagaj/commonWidgets/onboarding_background.dart';
 import '../commonWidgets/custom_snackbar.dart';
