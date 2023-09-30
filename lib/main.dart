@@ -7,6 +7,7 @@ import 'package:smart_kagaj/pages/create_contract_page.dart';
 import 'package:smart_kagaj/pages/dummy%20page.dart';
 import 'package:smart_kagaj/pages/entry_point.dart';
 import 'package:smart_kagaj/pages/generate.dart';
+import 'package:smart_kagaj/pages/home.dart';
 import 'Provider/provider.dart';
 import 'constant/fonts.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';

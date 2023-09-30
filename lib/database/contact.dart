@@ -51,6 +51,7 @@ class ContractDB {
   //     {required BuildContext context, required userUid}) async {
   //   try {
   //     await FirebaseFirestore.instance
+  //         .collection("Personal_Detail")
   //         .collection("Contracts_Lists")
   //         .doc(userUid)
   //         .set({
