@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:rive/rive.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
 import 'package:smart_kagaj/commonWidgets/onboarding_background.dart';
@@ -7,7 +6,6 @@ import 'package:smart_kagaj/commonWidgets/smooth_navigation.dart';
 import 'package:smart_kagaj/constant/data.dart';
 import 'package:smart_kagaj/constant/fonts.dart';
 import '../commonWidgets/check_page.dart';
-import 'login_signup_page.dart';
 
 class IntroductionPage extends StatefulWidget {
   const IntroductionPage({Key? key}) : super(key: key);

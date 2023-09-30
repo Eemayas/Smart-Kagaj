@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields
 import 'package:flutter/material.dart';
 import 'package:smart_kagaj/model/menu.dart';
+import 'package:smart_kagaj/pages/contracts_list_page.dart';
 import 'package:smart_kagaj/pages/user_detail_show_page.dart';
 import '../commonWidgets/btm_nav_item.dart';
 import '../constant/colors.dart';
@@ -56,7 +57,7 @@ class _EntryPointState extends State<EntryPoint>
 
   List<Widget> _pages = [
     DashboardPage(),
-    DashboardPage(),
+    ContractListPage(),
     NoticeListPage(),
     UserDetailShowPage(),
     DashboardPage(),

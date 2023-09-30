@@ -7,9 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
-import 'package:rive/rive.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
-
 import '../commonWidgets/custom_snackbar.dart';
 import '../commonWidgets/date_Input_field.dart';
 import '../commonWidgets/input_filed.dart';

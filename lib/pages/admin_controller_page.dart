@@ -1,10 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_kagaj/commonWidgets/custom_button.dart';
 import 'package:smart_kagaj/constant/fonts.dart';
 import 'package:smart_kagaj/database/admin.dart';
-import 'package:smart_kagaj/model/menu.dart';
 import '../commonWidgets/custom_snackbar.dart';
 import '../commonWidgets/input_filed.dart';
 

@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:pdf/widgets.dart' as pw;
@@ -6,7 +8,9 @@ import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
-import 'package:smart_kagaj/database/admin.dart';
+import 'package:smart_kagaj/constant/fonts.dart';
+
+import '../constant/colors.dart';
 
 class PDFView extends StatefulWidget {
   const PDFView({super.key});
@@ -19,6 +23,16 @@ class _PDFViewState extends State<PDFView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: kBackgroundColorAppBar,
+        title: Text(
+          "Contracts",
+          style: kwhiteTextStyle,
+        ),
+        actions: [
+          IconButton(icon: const Icon(Icons.more_vert), onPressed: () => {}),
+        ],
+      ),
       body: SingleChildScrollView(
           child: Column(
         children: [

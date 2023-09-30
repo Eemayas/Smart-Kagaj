@@ -3,7 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_kagaj/database/contract.dart';
+import 'package:smart_kagaj/database/contractList.dart';
 import 'package:smart_kagaj/pages/dashboard_page.dart';
 import '../commonWidgets/animated_button.dart';
 import '../commonWidgets/contact_card.dart';
@@ -45,7 +45,7 @@ class _ContractListPageState extends State<ContractListPage> {
           onTap: () async {
             final result = await showCreateDialog(context: context, user: user);
             if (result != null) {
-              ContractDB.contractsNameList.add(result);
+              ContractListDB.contractsNameList.add(result);
               setState(() {});
               // Now, you can trigger a UI update here if needed.
               // You may not need to do anything here if the UI automatically reflects the changes.
@@ -69,7 +69,7 @@ class _ContractListPageState extends State<ContractListPage> {
                 style: kwhiteTextStyle.copyWith(fontSize: 20),
               ),
               FutureBuilder<List<String>>(
-                future: ContractDB.fetchContractListFromFirestore(
+                future: ContractListDB.fetchContractListFromFirestore(
                     userUid: user.uid),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<String>> snapshot) {
@@ -98,14 +98,15 @@ class _ContractListPageState extends State<ContractListPage> {
                         crossAxisSpacing: 10.0,
                         childAspectRatio: 0.99,
                       ),
-                      itemCount: ContractDB.contractsNameList.length,
+                      itemCount: ContractListDB.contractsNameList.length,
                       itemBuilder: (BuildContext context, int i) {
                         return ContractCards(
                           onDelete: () async {
-                            if (await ContractDB.deleteContractFromFirestore(
-                                userUid: user.uid,
-                                dataToDelete:
-                                    ContractDB.contractsNameList[i])) {
+                            if (await ContractListDB
+                                .deleteContractFromFirestore(
+                                    userUid: user.uid,
+                                    dataToDelete:
+                                        ContractListDB.contractsNameList[i])) {
                               setState(() {});
                             }
                           },
@@ -113,15 +114,15 @@ class _ContractListPageState extends State<ContractListPage> {
                             final result = await showCreateDialog(
                                 context: context,
                                 user: user,
-                                text: ContractDB.contractsNameList[i]);
+                                text: ContractListDB.contractsNameList[i]);
                             if (result != null) {
-                              ContractDB.contractsNameList.add(result);
+                              ContractListDB.contractsNameList.add(result);
                               setState(() {});
                               // Now, you can trigger a UI update here if needed.
                               // You may not need to do anything here if the UI automatically reflects the changes.
                             }
                           },
-                          documentName: ContractDB.contractsNameList[i],
+                          documentName: ContractListDB.contractsNameList[i],
                         );
                       },
                     );
@@ -157,11 +158,11 @@ Future<String?> showCreateDialog(
             child: Text(text == "" ? 'Create' : "Edit"),
             onPressed: () async {
               if (contractNameController.text.isNotEmpty) {
-                if (await ContractDB.addContractToListInFirestore(
+                if (await ContractListDB.addContractToListInFirestore(
                     userUid: user.uid,
                     context: context,
                     newContract: contractNameController.text)) {
-                  ContractDB.newContractName = contractNameController.text;
+                  ContractListDB.newContractName = contractNameController.text;
                   Navigator.of(context).pop(contractNameController.text);
                 }
               }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:smart_kagaj/constant/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_kagaj/pages/contracts_list_page.dart';
+import 'package:smart_kagaj/pages/create_contract_page.dart';
+import 'package:smart_kagaj/pages/entry_point.dart';
 import 'package:smart_kagaj/pages/generate.dart';
 import 'Provider/provider.dart';
 import 'constant/fonts.dart';
@@ -44,7 +46,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const AdminControllerPage());
+        home: const CreateContractPage());
   }
 }
 
