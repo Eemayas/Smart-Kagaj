@@ -15,7 +15,7 @@ import 'documen_list_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
-  static String userName = "Prashants";
+  static String userName = FirebaseDB.userName ?? "User";
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();

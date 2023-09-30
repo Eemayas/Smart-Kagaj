@@ -30,14 +30,17 @@ class CustomProgressButton extends StatelessWidget {
             backgroundColor: Colors.blueAccent,
           ),
           onPressed: onTap,
-          child: Row(
-            children: [
-              icons,
-              const SizedBox(
-                width: 5,
-              ),
-              label,
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                icons,
+                const SizedBox(
+                  width: 5,
+                ),
+                label,
+              ],
+            ),
           )),
     );
   }
