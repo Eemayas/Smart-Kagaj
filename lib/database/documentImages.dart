@@ -4,6 +4,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../Provider/provider.dart';
 
 class DocumentImageListDB {
   static List documentImagesNameList = [];
@@ -35,6 +38,7 @@ class DocumentImageListDB {
       await collectionReference.doc('myDocumentImage').update({
         'DocumentImagesNameList': currentList,
       });
+      context.read<ChangedMsg>().changed();
       return true;
     } catch (e) {
       print('Error adding data to Firestore list: $e');

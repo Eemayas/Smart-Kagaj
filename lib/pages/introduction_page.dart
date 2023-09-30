@@ -6,6 +6,7 @@ import 'package:smart_kagaj/commonWidgets/onboarding_background.dart';
 import 'package:smart_kagaj/commonWidgets/smooth_navigation.dart';
 import 'package:smart_kagaj/constant/data.dart';
 import 'package:smart_kagaj/constant/fonts.dart';
+import '../commonWidgets/check_page.dart';
 import 'login_signup_page.dart';
 
 class IntroductionPage extends StatefulWidget {
@@ -17,20 +18,15 @@ class IntroductionPage extends StatefulWidget {
 }
 
 class _IntroductionPageState extends State<IntroductionPage> {
-  late RiveAnimationController _btnAnimationController;
+  // late RiveAnimationController _btnAnimationController;
 
   @override
   void initState() {
-    _btnAnimationController = OneShotAnimation(
-      "active",
-      autoplay: false,
-    );
     super.initState();
   }
 
   @override
   void dispose() {
-    _btnAnimationController.dispose();
     super.dispose();
   }
 
@@ -87,8 +83,8 @@ class _IntroductionPageState extends State<IntroductionPage> {
                 onTap: () {
                   Future.delayed(const Duration(milliseconds: 800), () {
                     FocusScope.of(context).requestFocus(FocusNode());
-                    Navigator.of(context)
-                        .push(SmoothSlidePageRoute(page: const LogInSignUp()));
+                    Navigator.of(context).push(
+                        SmoothSlidePageRoute(page: const CheckSignInOutPage()));
                   });
                 },
                 iconData: const Icon(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
 import 'package:smart_kagaj/commonWidgets/documents_card.dart';
+import 'package:smart_kagaj/database/firebase.dart';
 import '../commonWidgets/greeting_card.dart';
 import '../commonWidgets/notice_card.dart';
 import '../commonWidgets/smooth_navigation.dart';
@@ -22,6 +23,18 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   User user = FirebaseAuth.instance.currentUser!;
+  @override
+  void initState() {
+    EasyLoading.show(
+      dismissOnTap: true,
+      status: 'Processing...',
+      maskType: EasyLoadingMaskType.black,
+    );
+    FirebaseDB.retrievePersonalDetail(userUid: user.uid);
+    EasyLoading.dismiss();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

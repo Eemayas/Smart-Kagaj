@@ -6,7 +6,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
+import '../Provider/provider.dart';
 import '../commonWidgets/animated_button.dart';
 import '../commonWidgets/custom_button.dart';
 import '../commonWidgets/custom_snackbar.dart';
@@ -88,8 +90,9 @@ class _DocumentPageState extends State<DocumentPage> {
 
   @override
   Widget build(BuildContext context) {
-    DocumentImageListDB.fetchDocumentImageListFromFirestore(
-        documentName: widget.documentName, userUid: user.uid);
+    if (context.watch<ChangedMsg>().result == "changed") {
+      setState(() {});
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kBackgroundColorAppBar,
@@ -137,7 +140,7 @@ class _DocumentPageState extends State<DocumentPage> {
                       crossAxisCount: 1,
                       mainAxisSpacing: 10.0,
                       crossAxisSpacing: 10.0,
-                      childAspectRatio: 0.85,
+                      childAspectRatio: 0.7,
                     ),
                     itemCount: documentNames.length,
                     // DocumentImageListDB.documentImagesNameList.length,
