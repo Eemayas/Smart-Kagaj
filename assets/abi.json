@@ -1,0 +1,298 @@
+[
+    {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "contractHash",
+                "type": "string"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "string",
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "hash",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "dateSigned",
+                        "type": "uint256"
+                    }
+                ],
+                "indexed": false,
+                "internalType": "struct Kagaj.Signer[]",
+                "name": "signers",
+                "type": "tuple[]"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "string",
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "hash",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "dateSigned",
+                        "type": "uint256"
+                    }
+                ],
+                "indexed": false,
+                "internalType": "struct Kagaj.Signer",
+                "name": "authenticator",
+                "type": "tuple"
+            }
+        ],
+        "name": "signingComplete",
+        "type": "event"
+    },
+    {
+        "inputs": [],
+        "name": "authenticator",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "contract_hash",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "contractHash",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_date",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "_name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_description",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_content",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_terms",
+                "type": "string"
+            },
+            {
+                "internalType": "uint128",
+                "name": "_totalSignerCount",
+                "type": "uint128"
+            },
+            {
+                "internalType": "string",
+                "name": "_authName",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_authHash",
+                "type": "string"
+            }
+        ],
+        "name": "createContract",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "contractHash",
+                "type": "string"
+            }
+        ],
+        "name": "getContract",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "enum Kagaj.Stage",
+                        "name": "stage",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "date",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "description",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "content",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "termsNconditions",
+                        "type": "string"
+                    },
+                    {
+                        "components": [
+                            {
+                                "internalType": "string",
+                                "name": "name",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "hash",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "dateSigned",
+                                "type": "uint256"
+                            }
+                        ],
+                        "internalType": "struct Kagaj.Signer[]",
+                        "name": "signers",
+                        "type": "tuple[]"
+                    },
+                    {
+                        "internalType": "uint128",
+                        "name": "totalSignerCount",
+                        "type": "uint128"
+                    },
+                    {
+                        "components": [
+                            {
+                                "internalType": "string",
+                                "name": "name",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "hash",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "dateSigned",
+                                "type": "uint256"
+                            }
+                        ],
+                        "internalType": "struct Kagaj.Signer",
+                        "name": "authenticator",
+                        "type": "tuple"
+                    }
+                ],
+                "internalType": "struct Kagaj.Contract",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "contractHash",
+                "type": "string"
+            }
+        ],
+        "name": "getContractStage",
+        "outputs": [
+            {
+                "internalType": "enum Kagaj.Stage",
+                "name": "",
+                "type": "uint8"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "contractHash",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_hash",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_date",
+                "type": "uint256"
+            }
+        ],
+        "name": "sign",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]

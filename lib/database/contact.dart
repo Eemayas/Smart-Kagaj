@@ -19,38 +19,38 @@ class ContractDB {
         "dateController:$date\ncontractNameController:$contractName\ncontractDescriptionController:$contractDescription}\ncontractContentController:$contractContent\ncontractTermsAndConditionController:$contractTermsAndCondition\ncontractTotalSignersController:$contractTotalSigners\ncontractAuthNameController:$contractAuthName \n contractAuthHashController: $contractAuthHash");
   }
 
-  static Future<bool> uploadContractDetails(
-      {required BuildContext context, required userUid}) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection("Personal_Detail")
-          .doc(userUid)
-          .set({
-        'Username': userName,
-        'PhoneNumber': phoneNumber,
-        "Date of Birth": dateOfBirth,
-        "Profile Image URL": profileImageURL,
-        "Citizenship Number": citizenshipNumber,
-        "Citizenhip ImageURL": citizenshipImageURL,
-        "Citizenhip Issued Date": citizenshipIssuedDate,
-      });
-      print("User Details added to Firebase");
-      customSnackbar(
-        context: context,
-        icons: Icons.done_all,
-        iconsColor: Colors.green,
-        text: "User Details added to Firebase",
-      );
-      return true;
-    } catch (e) {
-      print("Error Adding user Details to Firebase : $e");
-      customSnackbar(
-        context: context,
-        text: "Error Adding user Details to Firebase : $e",
-      );
-      return false;
-    }
-  }
+  // static Future<bool> uploadContractDetails(
+  //     {required BuildContext context, required userUid}) async {
+  //   try {
+  //     await FirebaseFirestore.instance
+  //         .collection("Personal_Detail")
+  //         .doc(userUid)
+  //         .set({
+  //       'Username': userName,
+  //       'PhoneNumber': phoneNumber,
+  //       "Date of Birth": dateOfBirth,
+  //       "Profile Image URL": profileImageURL,
+  //       "Citizenship Number": citizenshipNumber,
+  //       "Citizenhip ImageURL": citizenshipImageURL,
+  //       "Citizenhip Issued Date": citizenshipIssuedDate,
+  //     });
+  //     print("User Details added to Firebase");
+  //     customSnackbar(
+  //       context: context,
+  //       icons: Icons.done_all,
+  //       iconsColor: Colors.green,
+  //       text: "User Details added to Firebase",
+  //     );
+  //     return true;
+  //   } catch (e) {
+  //     print("Error Adding user Details to Firebase : $e");
+  //     customSnackbar(
+  //       context: context,
+  //       text: "Error Adding user Details to Firebase : $e",
+  //     );
+  //     return false;
+  //   }
+  // }
 
   // static Future<Map<String, dynamic>?> retrievePersonalDetail(
   //     {required String userUid}) async {
