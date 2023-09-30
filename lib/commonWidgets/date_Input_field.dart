@@ -54,11 +54,12 @@ class DateInputField extends StatelessWidget {
             ? Container(width: 0)
             : controllerss.text.isEmpty
                 ? Container(width: 0)
-                : IconButton(
-                    icon: const Icon(Icons.close),
-                    color: Colors.red,
-                    onPressed: () => controllerss.clear(),
-                  ),
+                : isEnable
+                    ? IconButton(
+                        color: Colors.red,
+                        icon: const Icon(Icons.close),
+                        onPressed: () => controllerss.clear())
+                    : Container(width: 0),
         prefixIconColor: Colors.white,
         hintText: hintText,
         contentPadding: const EdgeInsets.fromLTRB(32, 16, 32, 16),

@@ -72,11 +72,12 @@ class _InputFieldState extends State<InputField> {
                 ? Container(width: 0)
                 : widget.controllerss.text.isEmpty
                     ? Container(width: 0)
-                    : IconButton(
-                        color: Colors.red,
-                        icon: Icon(Icons.close),
-                        onPressed: () => widget.controllerss.clear(),
-                      ),
+                    : widget.isEnable
+                        ? IconButton(
+                            color: Colors.red,
+                            icon: Icon(Icons.close),
+                            onPressed: () => widget.controllerss.clear())
+                        : Container(width: 0),
         labelStyle: kwhiteTextStyle,
         filled: true,
         hintStyle: kwhiteTextStyle,

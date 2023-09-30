@@ -88,6 +88,8 @@ class _DocumentPageState extends State<DocumentPage> {
 
   @override
   Widget build(BuildContext context) {
+    DocumentImageListDB.fetchDocumentImageListFromFirestore(
+        documentName: widget.documentName, userUid: user.uid);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kBackgroundColorAppBar,
@@ -137,8 +139,8 @@ class _DocumentPageState extends State<DocumentPage> {
                       crossAxisSpacing: 10.0,
                       childAspectRatio: 0.85,
                     ),
-                    itemCount:
-                        DocumentImageListDB.documentImagesNameList.length,
+                    itemCount: documentNames.length,
+                    // DocumentImageListDB.documentImagesNameList.length,
                     itemBuilder: (BuildContext context, int i) {
                       return ImageViewer(
                           // key: DocumentImageListDB.documentImagesNameList[i],
@@ -153,8 +155,9 @@ class _DocumentPageState extends State<DocumentPage> {
                             }
                           },
                           user: user,
-                          imgURL:
-                              DocumentImageListDB.documentImagesNameList[i]);
+                          imgURL: documentNames[i]
+                          // DocumentImageListDB.documentImagesNameList[i]
+                          );
                     },
                   );
                 }

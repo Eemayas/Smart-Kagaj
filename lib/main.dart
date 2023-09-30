@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:smart_kagaj/constant/colors.dart';
 import 'package:smart_kagaj/pages/entry_point.dart';
 import 'package:smart_kagaj/pages/introduction_page.dart';
+import 'package:smart_kagaj/pages/login_signup_page.dart';
+import 'package:smart_kagaj/pages/user_detail_show_page.dart';
 import 'constant/fonts.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
