@@ -7,11 +7,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:http/http.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
 import 'package:smart_kagaj/database/contact.dart';
 import 'package:smart_kagaj/database/firebase.dart';
 import 'package:smart_kagaj/pages/terms_condition_page.dart';
+import 'package:smart_kagaj/services/functions.dart';
+import 'package:smart_kagaj/utils/constants.dart';
+import 'package:web3dart/web3dart.dart';
 import '../commonWidgets/custom_snackbar.dart';
 import '../commonWidgets/date_Input_field.dart';
 import '../commonWidgets/input_filed.dart';
@@ -32,6 +36,8 @@ class CreateContractPage extends StatefulWidget {
 }
 
 class _CreateContractPageState extends State<CreateContractPage> {
+  Client? httpClient;
+  Web3Client? ethClient;
   final dateController = TextEditingController();
   final contractNameController = TextEditingController();
   final contractDescriptionController = TextEditingController();
@@ -58,12 +64,25 @@ class _CreateContractPageState extends State<CreateContractPage> {
     ContractDB.contractAuthHash =
         calculateMD5("$FirebaseDB.userName$FirebaseDB.citizenshipNumber");
     ContractDB.printall();
-
+    createContract(
+        ContractAddress,
+        DateTime.now().millisecondsSinceEpoch,
+        ContractDB.contractName!,
+        ContractDB.contractDescription!,
+        ContractDB.contractContent!,
+        ContractDB.contractTermsAndCondition!,
+        int.parse(ContractDB.contractTotalSigners!),
+        ContractDB.contractAuthName!,
+        ContractDB.contractAuthHash!,
+        ethClient!);
     EasyLoading.dismiss();
   }
 
   @override
   void initState() {
+    httpClient = Client();
+    ethClient = Web3Client(infura_url, httpClient!);
+
     super.initState();
     contractNameController.addListener(() => setState(() {}));
     contractDescriptionController.addListener(() => setState(() {}));
