@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constant/colors.dart';
 import '../constant/fonts.dart';
+import '../pages/check_MPIN.dart';
 import '../pages/document_page.dart';
 import 'smooth_navigation.dart';
 
@@ -33,9 +34,15 @@ class DocumentsCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      // onTap: () => Navigator.of(context).push(SmoothSlidePageRoute(
+      //     page: DocumentPage(
+      //   documentName: documentName,
+      // ))),
       onTap: () => Navigator.of(context).push(SmoothSlidePageRoute(
-          page: DocumentPage(
-        documentName: documentName,
+          page: CheckMPIN(
+        nextPage: DocumentPage(
+          documentName: documentName,
+        ),
       ))),
       child: Padding(
         padding: const EdgeInsets.only(top: 10),

@@ -95,7 +95,7 @@ class _DocumentListPageState extends State<DocumentListPage> {
                         crossAxisCount: 2,
                         mainAxisSpacing: 10.0,
                         crossAxisSpacing: 10.0,
-                        childAspectRatio: 0.99,
+                        childAspectRatio: 0.78,
                       ),
                       itemCount: DocumentDB.documentsNameList.length,
                       itemBuilder: (BuildContext context, int i) {
@@ -156,10 +156,20 @@ Future<String?> showCreateDialog(
             child: Text(text == "" ? 'Create' : "Edit"),
             onPressed: () async {
               if (contractNameController.text.isNotEmpty) {
-                if (await DocumentDB.addDocumentToListInFirestore(
-                    userUid: user.uid,
-                    context: context,
-                    newDocument: contractNameController.text)) {
+                if (text == "" &&
+                    await DocumentDB.addDocumentToListInFirestore(
+                        userUid: user.uid,
+                        context: context,
+                        newDocument: contractNameController.text)) {
+                  DocumentDB.newDocumentName = contractNameController.text;
+                  Navigator.of(context).pop(contractNameController.text);
+                }
+                if (text != "" &&
+                    await DocumentDB.editDocumentInFirestore(
+                        userUid: user.uid,
+                        context: context,
+                        oldDocument: text,
+                        newDocument: contractNameController.text)) {
                   DocumentDB.newDocumentName = contractNameController.text;
                   Navigator.of(context).pop(contractNameController.text);
                 }

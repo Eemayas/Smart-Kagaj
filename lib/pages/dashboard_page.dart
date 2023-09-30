@@ -96,7 +96,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         crossAxisCount: 2,
                         mainAxisSpacing: 10.0,
                         crossAxisSpacing: 10.0,
-                        childAspectRatio: 0.99,
+                        childAspectRatio: 0.78,
                       ),
                       itemCount: DocumentDB.documentsNameList.length > 4
                           ? 4

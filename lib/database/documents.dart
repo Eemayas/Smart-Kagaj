@@ -161,10 +161,11 @@ class DocumentDB {
     }
   }
 
-  static Future<void> editDocumentInFirestore({
+  static Future<bool> editDocumentInFirestore({
     required String userUid,
     required String newDocument,
     required String oldDocument,
+    required BuildContext context,
   }) async {
     try {
       final firestoreInstance = FirebaseFirestore.instance;
@@ -190,11 +191,14 @@ class DocumentDB {
         await collectionReference.doc('myDocument').update({
           'documentsNameList': currentList,
         });
+        return true;
       } else {
         print("Document not found in the list.");
+        return false;
       }
     } catch (e) {
       print('Error editing data in Firestore list: $e');
+      return false;
     }
   }
 
