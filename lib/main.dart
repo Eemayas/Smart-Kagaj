@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const EntryPoint());
+        home: const ContractListPage());
   }
 }
 

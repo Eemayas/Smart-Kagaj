@@ -2,7 +2,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_kagaj/Provider/provider.dart';
 import 'package:smart_kagaj/utils/constants.dart';
 
 import '../commonWidgets/custom_snackbar.dart';
@@ -16,7 +15,7 @@ class ContractDB {
   static String? contractTotalSigners;
   static String? contractAuthName;
   static String? contractAuthHash;
-  static List<Map<String, String>>? Signers;
+  static List? Signers;
   static List? contractsHashess;
   static List ContractDetail = [
     {
@@ -197,6 +196,7 @@ class ContractDB {
         contractTotalSigners = data["contractTotalSigners"];
         contractAuthName = data["contractAuthName"];
         contractAuthHash = data["contractAuthHash"];
+        Signers = data["Signers"];
         printall();
         return contractSnapshot.data() as Map<String, dynamic>?;
       } else {

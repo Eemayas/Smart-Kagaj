@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
 import 'package:smart_kagaj/commonWidgets/documents_card.dart';
+import 'package:smart_kagaj/database/admin.dart';
 import 'package:smart_kagaj/database/firebase.dart';
 import 'package:smart_kagaj/pages/nav_drawer.dart';
 import '../commonWidgets/greeting_card.dart';
@@ -24,6 +25,7 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   User user = FirebaseAuth.instance.currentUser!;
+
   @override
   void initState() {
     EasyLoading.show(
@@ -38,6 +40,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    AdminDB.fetchAdminListFromFirestore();
     return Scaffold(
         appBar: AppBar(
           backgroundColor: kBackgroundColorAppBar,

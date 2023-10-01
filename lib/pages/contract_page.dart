@@ -86,15 +86,32 @@ class _DocumentPageState extends State<ContractPage> {
                                   contractCreatedDate: ContractDB.date!,
                                   contractDescription:
                                       ContractDB.contractDescription!,
-                                  partyOneDate: ".............",
-                                  partyOneHash: ".............",
-                                  partyOneName: ".............",
-                                  partyTwoDate: "..............",
-                                  partyTwoHash: ".............",
-                                  partyTwoName: "............",
-                                  AuthenticatorDate: "..............",
-                                  AuthenticatorHash: ".............",
-                                  AuthenticatorName: "............",
+                                  partyOneDate: ContractDB.Signers?[0]
+                                          ["date"] ??
+                                      ".............",
+                                  partyOneHash: ContractDB.Signers?[0]
+                                          ["hash"] ??
+                                      ".............",
+                                  partyOneName: ContractDB.Signers?[0]
+                                          ["name"] ??
+                                      ".............",
+                                  partyTwoDate: ContractDB.Signers?[1]
+                                          ["date"] ??
+                                      "..............",
+                                  partyTwoHash: ContractDB.Signers?[1]
+                                          ["hash"] ??
+                                      ".............",
+                                  partyTwoName: ContractDB.Signers?[1]
+                                          ["name"] ??
+                                      "............",
+                                  AuthenticatorDate: "2023-10-01",
+                                  // DateFormat('yyyy-MM-dd').format( DateTime.now())),
+                                  AuthenticatorHash:
+                                      ContractDB.contractAuthHash ??
+                                          ".............",
+                                  AuthenticatorName:
+                                      ContractDB.contractAuthName ??
+                                          "............",
                                   termsAndConditions: ContractDB
                                       .contractTermsAndCondition!
                                       .split('|'),

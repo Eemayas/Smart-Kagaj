@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smart_kagaj/commonWidgets/custom_snackbar.dart';
 import 'package:smart_kagaj/constant/colors.dart';
+import 'package:smart_kagaj/database/admin.dart';
 import 'package:smart_kagaj/pages/admin_controller_page.dart';
 import 'package:smart_kagaj/pages/entry_point.dart';
 import 'package:smart_kagaj/pages/login_signup_page.dart';
@@ -59,14 +60,16 @@ class _NavDrawerState extends State<NavDrawer> {
                           SmoothSlidePageRoute(page: const EntryPoint()));
                     },
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.add),
-                    title: const Text('Admin'),
-                    onTap: () {
-                      Navigator.of(context).push(SmoothSlidePageRoute(
-                          page: const AdminControllerPage()));
-                    },
-                  ),
+                  Visibility(
+                      visible: AdminDB.checkemail(),
+                      child: ListTile(
+                        leading: const Icon(Icons.add),
+                        title: const Text('Admin'),
+                        onTap: () {
+                          Navigator.of(context).push(SmoothSlidePageRoute(
+                              page: const AdminControllerPage()));
+                        },
+                      )),
                   ListTile(
                     leading: const Icon(Icons.logout),
                     title: const Text('Logout'),
@@ -90,6 +93,15 @@ class _NavDrawerState extends State<NavDrawer> {
                       }
                     },
                   ),
+                  Visibility(
+                      visible: AdminDB.checkemail(),
+                      child: ListTile(
+                        leading: const Icon(Icons.exit_to_app),
+                        title: const Text('Create Contract'),
+                        onTap: () {
+                          SystemNavigator.pop();
+                        },
+                      )),
                   ListTile(
                     leading: const Icon(Icons.exit_to_app),
                     title: const Text('Quit'),
