@@ -14,7 +14,7 @@ class ContractCards extends StatelessWidget {
   final Color borderColor;
   final Color boxShadowColor;
   final Color iconBgColor;
-
+  final bool isAdmin;
   static const Color _iconBgColor = Color.fromARGB(113, 3, 95, 80);
   static const Color _borderColor = Colors.transparent;
 
@@ -28,6 +28,7 @@ class ContractCards extends StatelessWidget {
     this.iconBgColor = _iconBgColor,
     required this.onDelete,
     required this.onEdit,
+    this.isAdmin = false,
     // required this.nextPage,
   });
 
@@ -90,26 +91,29 @@ class ContractCards extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    IconButton(
-                        onPressed: () {
-                          onDelete();
-                        },
-                        icon: const Icon(
-                          Icons.delete_forever,
-                          color: Colors.redAccent,
-                        )),
-                    IconButton(
-                        onPressed: () {
-                          onEdit();
-                        },
-                        icon: const Icon(
-                          Icons.edit_document,
-                          color: Colors.green,
-                        ))
-                  ],
+                Visibility(
+                  visible: isAdmin,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      IconButton(
+                          onPressed: () {
+                            onDelete();
+                          },
+                          icon: const Icon(
+                            Icons.delete_forever,
+                            color: Colors.redAccent,
+                          )),
+                      IconButton(
+                          onPressed: () {
+                            onEdit();
+                          },
+                          icon: const Icon(
+                            Icons.edit_document,
+                            color: Colors.green,
+                          ))
+                    ],
+                  ),
                 )
               ],
             ),

@@ -2,17 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_kagaj/constant/colors.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_kagaj/pages/contracts_list_page.dart';
 import 'package:smart_kagaj/pages/create_contract_page.dart';
-import 'package:smart_kagaj/pages/dummy%20page.dart';
 import 'package:smart_kagaj/pages/entry_point.dart';
-import 'package:smart_kagaj/pages/generate.dart';
-import 'package:smart_kagaj/pages/home.dart';
 import 'Provider/provider.dart';
 import 'constant/fonts.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-import 'pages/admin_controller_page.dart';
+import 'pages/contracts_list_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +44,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: MyHomePage());
+        home: const EntryPoint());
   }
 }
 

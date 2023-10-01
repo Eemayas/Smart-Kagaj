@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
 import 'package:smart_kagaj/commonWidgets/documents_card.dart';
 import 'package:smart_kagaj/database/firebase.dart';
+import 'package:smart_kagaj/pages/nav_drawer.dart';
 import '../commonWidgets/greeting_card.dart';
 import '../commonWidgets/notice_card.dart';
 import '../commonWidgets/smooth_navigation.dart';
@@ -48,6 +49,7 @@ class _DashboardPageState extends State<DashboardPage> {
             IconButton(icon: const Icon(Icons.more_vert), onPressed: () => {}),
           ],
         ),
+        drawer: const NavDrawer(),
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: SingleChildScrollView(

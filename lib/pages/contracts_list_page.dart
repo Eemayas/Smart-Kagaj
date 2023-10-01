@@ -41,7 +41,7 @@ class _ContractListPageState extends State<ContractListPage> {
             Icons.create_new_folder,
             color: Colors.black,
           ),
-          label: 'Add Contract',
+          label: 'Join Contract',
           onTap: () async {
             final result = await showCreateDialog(context: context, user: user);
             if (result != null) {
@@ -146,11 +146,11 @@ Future<String?> showCreateDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Create Contract'),
+        title: Text('Join Contract'),
         content: TextField(
           controller: contractNameController,
           decoration: InputDecoration(
-            hintText: 'Enter something',
+            hintText: 'Enter hash code',
           ),
         ),
         actions: <Widget>[

@@ -62,7 +62,7 @@ class _LogInSignUpState extends State<LogInSignUp> {
         }
       });
       Navigator.of(context)
-          .push(SmoothSlidePageRoute(page: const EntryPoint()));
+          .pushReplacement(SmoothSlidePageRoute(page: const EntryPoint()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         customSnackbar(context: context, text: 'No user found for that email.');

@@ -1,13 +1,24 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, avoid_print, unnecessary_null_comparison, unused_element
-
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, avoid_print, unnecessary_null_comparison, unused_element, depend_on_referenced_packages
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-
+import 'package:pdf/pdf.dart';
+import 'package:printing/printing.dart';
+import 'package:smart_kagaj/commonWidgets/create_pdf.dart';
+import 'package:smart_kagaj/commonWidgets/custom_snackbar.dart';
+import 'package:smart_kagaj/commonWidgets/hashgenerator.dart';
+import 'package:smart_kagaj/commonWidgets/smooth_navigation.dart';
+import 'package:smart_kagaj/database/contact.dart';
+import 'package:smart_kagaj/database/firebase.dart';
+import 'package:smart_kagaj/pages/check_MPIN.dart';
 import '../commonWidgets/animated_button.dart';
 import '../commonWidgets/custom_button.dart';
 import '../constant/fonts.dart';
-import '../database/documentImages.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class ContractPage extends StatefulWidget {
   const ContractPage({super.key, required this.documentName});
@@ -35,13 +46,12 @@ class _DocumentPageState extends State<ContractPage> {
           padding: EdgeInsets.all(20.0),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            FutureBuilder<List<String>>(
-              future: DocumentImageListDB.fetchDocumentImageListFromFirestore(
-                  documentName: widget.documentName,
-                  userUid:
-                      user.uid), // Replace with your data fetching function
-              builder:
-                  (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+            FutureBuilder<Map<String, dynamic>?>(
+              future: ContractDB.fetchContractFromFirestore(
+                  contractAddress: widget.documentName,
+                  context: context), // Replace with your data fetching function
+              builder: (BuildContext context,
+                  AsyncSnapshot<Map<String, dynamic>?> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   EasyLoading.show(
                     dismissOnTap: true,
@@ -56,35 +66,45 @@ class _DocumentPageState extends State<ContractPage> {
                   print(snapshot);
                   final documentNames = snapshot.data ?? [];
                   print(documentNames);
-                  print(DocumentImageListDB.documentImagesNameList);
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      mainAxisSpacing: 10.0,
-                      crossAxisSpacing: 10.0,
-                      childAspectRatio: 0.85,
-                    ),
-                    itemCount:
-                        DocumentImageListDB.documentImagesNameList.length,
-                    itemBuilder: (BuildContext context, int i) {
-                      return ImageViewer(
-                          // key: DocumentImageListDB.documentImagesNameList[i],
-                          onDelete: () async {
-                            if (await DocumentImageListDB
-                                .deleteDocumentImageFromFirestore(
-                                    documentName: widget.documentName,
-                                    userUid: user.uid,
-                                    dataToDelete: DocumentImageListDB
-                                        .documentImagesNameList[i])) {
-                              setState(() {});
-                            }
-                          },
-                          user: user,
-                          imgURL:
-                              DocumentImageListDB.documentImagesNameList[i]);
-                    },
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        child: PdfPreview(
+                            pdfFileName: "Prashant",
+                            pageFormats: const {
+                              'A4': PdfPageFormat.a4,
+                            },
+                            useActions: false,
+                            canChangeOrientation: false,
+                            canChangePageFormat: false,
+                            // actions: [Text("data")],
+                            allowPrinting: false,
+                            allowSharing: false,
+                            loadingWidget: const CircularProgressIndicator(),
+                            build: (format) => createPdf(
+                                  contractCreatedDate: ContractDB.date!,
+                                  contractDescription:
+                                      ContractDB.contractDescription!,
+                                  partyOneDate: ".............",
+                                  partyOneHash: ".............",
+                                  partyOneName: ".............",
+                                  partyTwoDate: "..............",
+                                  partyTwoHash: ".............",
+                                  partyTwoName: "............",
+                                  AuthenticatorDate: "..............",
+                                  AuthenticatorHash: ".............",
+                                  AuthenticatorName: "............",
+                                  termsAndConditions: ContractDB
+                                      .contractTermsAndCondition!
+                                      .split('|'),
+                                  format: format,
+                                  contractTitle: ContractDB.contractName!,
+                                )
+                            //d generatePdfContent()
+                            ),
+                      ),
+                    ],
                   );
                 }
               },
@@ -96,9 +116,89 @@ class _DocumentPageState extends State<ContractPage> {
                   status: 'Processing...',
                   maskType: EasyLoadingMaskType.black,
                 );
-                // if (await _pickImage()) {
-                //   setState(() {});
+                Navigator.of(context).push(SmoothSlidePageRoute(
+                    page: CheckMPIN(
+                        isContract: true,
+                        contractAddress: widget.documentName,
+                        nextPage: ContractPage(
+                          documentName: widget.documentName,
+                        ))));
+                // if (ContractDB.Signers?[0]["hash"] == "........") {
+                //   ContractDB.editContractInFirestore(
+                //       context: context,
+                //       contractAddress: widget.documentName,
+                //       updatedContractData: {
+                //         "date": ContractDB.date,
+                //         "contractName": ContractDB.contractName,
+                //         "contractDescription": ContractDB.contractDescription,
+                //         "contractContent": ContractDB.contractContent,
+                //         "contractTermsAndCondition":
+                //             ContractDB.contractTermsAndCondition,
+                //         "contractTotalSigners": ContractDB.contractTotalSigners,
+                //         "contractAuthName": ContractDB.contractAuthName,
+                //         "contractAuthHash": ContractDB.contractAuthHash,
+                //         "contractAddress": widget.documentName,
+                //         "Signers": [
+                //           {
+                //             "date": DateFormat('yyyy-MM-dd')
+                //                 .format(DateTime.now())
+                //                 .toString(),
+                //             "name": FirebaseDB.userName,
+                //             "hash": calculateMD5(
+                //                 "$FirebaseDB.userName$FirebaseDB.citizenshipNumber"),
+                //           },
+                //           {
+                //             "date": ".........",
+                //             "name": ".........",
+                //             "hash": "........"
+                //           },
+                //         ]
+                //       });
+                //   customSnackbar(
+                //     context: context,
+                //     text: "Contract is sucessfully signed",
+                //     icons: Icons.done,
+                //     iconsColor: Colors.green,
+                //   );
+                // } else {
+                //   ContractDB.editContractInFirestore(
+                //       context: context,
+                //       contractAddress: widget.documentName,
+                //       updatedContractData: {
+                //         "date": ContractDB.date,
+                //         "contractName": ContractDB.contractName,
+                //         "contractDescription": ContractDB.contractDescription,
+                //         "contractContent": ContractDB.contractContent,
+                //         "contractTermsAndCondition":
+                //             ContractDB.contractTermsAndCondition,
+                //         "contractTotalSigners": ContractDB.contractTotalSigners,
+                //         "contractAuthName": ContractDB.contractAuthName,
+                //         "contractAuthHash": ContractDB.contractAuthHash,
+                //         "contractAddress": widget.documentName,
+                //         "Signers": [
+                //           {
+                //             "date": ContractDB.Signers?[0]["date"],
+                //             "name": ContractDB.Signers?[0]["name"],
+                //             "hash": ContractDB.Signers?[0]["hash"],
+                //           },
+                //           {
+                //             "date": DateFormat('yyyy-MM-dd')
+                //                 .format(DateTime.now())
+                //                 .toString(),
+                //             "name": FirebaseDB.userName,
+                //             "hash": calculateMD5(
+                //                 "$FirebaseDB.userName$FirebaseDB.citizenshipNumber"),
+                //           },
+                //         ]
+                //       });
+                //   customSnackbar(
+                //     context: context,
+                //     text: "Contract is sucessfully signed",
+                //     icons: Icons.done,
+                //     iconsColor: Colors.green,
+                //   );
                 // }
+                setState(() {});
                 EasyLoading.dismiss();
               },
               iconData: Icon(
@@ -106,41 +206,145 @@ class _DocumentPageState extends State<ContractPage> {
                 color: Colors.black,
               ),
             ),
-            RiveAnimatedBtn(
-              label: "Edit Contracts",
-              onTap: () async {
-                EasyLoading.show(
-                  status: 'Processing...',
-                  maskType: EasyLoadingMaskType.black,
-                );
-                // if (await _pickImage()) {
-                //   setState(() {});
-                // }
-                EasyLoading.dismiss();
-              },
-              iconData: Icon(
-                Icons.note_add_outlined,
-                color: Colors.black,
-              ),
-            ),
-            // ClipRRect(
-            //   borderRadius: BorderRadius.circular(100),
-            //   child: DocumentImageListDB.newDocumentImageName != null
-            //       ? Container(
-            //           decoration: buildGradientBorder(),
-            //           child: CircleAvatar(
-            //             radius: 100, // Adjust the size as needed
-            //             backgroundImage: FileImage(
-            //                 DocumentImageListDB.newDocumentImageName!),
-            //           ),
-            //         )
-            //       : Container(),
-            // ),
           ]),
         )),
       ),
     );
   }
+
+//   Future<Uint8List> _createPdf({
+//     required PdfPageFormat format,
+//     required String contractTitle,
+//     required String contractDescription,
+//     required List termsAndConditions,
+//     required String partyOneName,
+//     required String partyOneHash,
+//     required String partyOneDate,
+//     required String partyTwoName,
+//     required String partyTwoHash,
+//     required String partyTwoDate,
+//     required String AuthenticatorName,
+//     required String AuthenticatorHash,
+//     required String AuthenticatorDate,
+//     required String contractCreatedDate,
+//   }) async {
+//     final pdf = pw.Document(
+//       version: PdfVersion.pdf_1_4,
+//       compress: true,
+//     );
+//     pdf.addPage(
+//       pw.MultiPage(
+//           pageFormat: PdfPageFormat.a4,
+//           margin: const pw.EdgeInsets.all(32),
+//           build: (pw.Context context) {
+//             return <pw.Widget>[
+//               pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+//                 pw.Text(
+//                   "Date: $contractCreatedDate",
+//                 ),
+//               ]),
+//               pw.Header(
+//                   level: 1,
+//                   child: pw.Row(
+//                       mainAxisAlignment: pw.MainAxisAlignment.center,
+//                       children: <pw.Widget>[
+//                         pw.Text(
+//                           contractTitle,
+//                           textScaleFactor: 2,
+//                         ),
+//                       ])),
+//               pw.SizedBox(height: 20),
+//               pw.Paragraph(
+//                 text: contractDescription,
+//               ),
+//               pw.Header(
+//                 text: "Term and Conditions:",
+//               ),
+//               for (int i = 0; i < termsAndConditions.length; i++)
+//                 pw.Padding(
+//                   padding: pw.EdgeInsets.only(top: 10),
+//                   child: pw.Text(
+//                     '${i + 1}.${termsAndConditions[i]}',
+//                     style: const pw.TextStyle(fontSize: 12.0),
+//                   ),
+//                 ),
+//               pw.SizedBox(height: 20),
+//               pw.Header(
+//                 text: "Signatures:",
+//               ),
+//               pw.Row(
+//                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   pw.Column(
+//                       mainAxisAlignment: pw.MainAxisAlignment.start,
+//                       crossAxisAlignment: pw.CrossAxisAlignment.start,
+//                       children: [
+//                         pw.Header(
+//                           text: "Party 1",
+//                         ),
+//                         pw.Text(
+//                           "Name:$partyOneName",
+//                         ),
+//                         pw.Text(
+//                           "Hash:$partyOneHash",
+//                         ),
+//                         pw.Text(
+//                           "Date:$partyOneDate",
+//                         ),
+//                       ]),
+//                   pw.Column(
+//                       mainAxisAlignment: pw.MainAxisAlignment.start,
+//                       crossAxisAlignment: pw.CrossAxisAlignment.start,
+//                       children: [
+//                         pw.Header(
+//                           text: "Party 2",
+//                         ),
+//                         pw.Text(
+//                           "Name:$partyTwoName",
+//                         ),
+//                         pw.Text(
+//                           "Hash:$partyTwoHash",
+//                         ),
+//                         pw.Text(
+//                           "Date:$partyTwoDate",
+//                         ),
+//                       ]),
+//                 ],
+//               ),
+//               pw.Padding(padding: const pw.EdgeInsets.all(10)),
+//               // pw.Column(
+//               //     mainAxisAlignment: pw.MainAxisAlignment.start,
+//               //     crossAxisAlignment: pw.CrossAxisAlignment.start,
+//               //     children: [
+//               //       pw.Header(
+//               //         text: "Authenticator",
+//               //       ),
+//               //       pw.Text(
+//               //         "Name:$AuthenticatorName",
+//               //       ),
+//               //       pw.Text(
+//               //         "Hash:$AuthenticatorHash",
+//               //       ),
+//               //       pw.Text(
+//               //         "Date:$AuthenticatorDate",
+//               //       ),
+//               //     ]),
+//             ];
+//           }),
+//     );
+//     // Get the local directory path
+//     final directory = await getExternalStorageDirectory();
+
+//     // Create a file path
+//     final filePath = '${directory?.path}/terms_and_conditions.pdf';
+
+//     // Save the PDF to local storage
+//     final file = File(filePath);
+//     await file.writeAsBytes(await pdf.save());
+
+//     print('PDF saved to: $filePath');
+//     return pdf.save();
+//   }
 }
 
 class ImageViewer extends StatelessWidget {

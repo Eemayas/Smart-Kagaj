@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rive/rive.dart';
+import 'package:smart_kagaj/pages/introduction_page.dart';
 import '../commonWidgets/animated_button.dart';
 import '../commonWidgets/custom_snackbar.dart';
 import '../commonWidgets/date_Input_field.dart';
@@ -84,7 +85,10 @@ class _CitizenshipEntryPageState extends State<CitizenshipEntryPage> {
         FirebaseDB.printall();
         if (await FirebaseDB.uploadPersonalDetail(
             context: context, userUid: user.uid)) {
-          Navigator.of(context).push(SmoothSlidePageRoute(page: SetupMPIN()));
+          Navigator.of(context).pushAndRemoveUntil(
+            SmoothSlidePageRoute(page: SetupMPIN()),
+            (route) => false,
+          );
         }
       } else {
         print("Error: Image URL is null");

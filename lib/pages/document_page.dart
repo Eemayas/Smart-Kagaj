@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_kagaj/pages/qr_generator.dart';
 
 import '../Provider/provider.dart';
 import '../commonWidgets/animated_button.dart';
 import '../commonWidgets/custom_button.dart';
 import '../commonWidgets/custom_snackbar.dart';
+import '../commonWidgets/smooth_navigation.dart';
 import '../commonWidgets/uploadImageToFirebase.dart';
 import '../constant/colors.dart';
 import '../constant/fonts.dart';
@@ -243,15 +245,32 @@ class ImageViewer extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.bottomRight,
-            child: CustomProgressButton(
-              label: Text(
-                "Delete",
-                style: kwhiteTextStyle,
-              ),
-              icons: const Icon(Icons.delete_forever),
-              onTap: () {
-                onDelete();
-              },
+            child: Column(
+              children: [
+                CustomProgressButton(
+                  label: Text(
+                    "Delete",
+                    style: kwhiteTextStyle,
+                  ),
+                  icons: const Icon(Icons.delete_forever),
+                  onTap: () {
+                    onDelete();
+                  },
+                ),
+                CustomProgressButton(
+                  label: Text(
+                    "Share",
+                    style: kwhiteTextStyle,
+                  ),
+                  icons: const Icon(Icons.share),
+                  onTap: () {
+                    Navigator.of(context).push(SmoothSlidePageRoute(
+                        page: QRGeneratorPage(
+                      imageUrl: imgURL,
+                    )));
+                  },
+                ),
+              ],
             ),
           )
         ],

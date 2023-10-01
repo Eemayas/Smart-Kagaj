@@ -1,31 +1,27 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
+// ignore_for_file: use_build_context_synchronously, avoid_print, depend_on_referenced_packages
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smart_kagaj/commonWidgets/animated_button.dart';
+import 'package:smart_kagaj/commonWidgets/hashgenerator.dart';
+import 'package:smart_kagaj/commonWidgets/smooth_navigation.dart';
+import 'package:smart_kagaj/constant/fonts.dart';
 import 'package:smart_kagaj/database/contact.dart';
 import 'package:smart_kagaj/database/firebase.dart';
-import 'package:smart_kagaj/pages/terms_condition_page.dart';
-import 'package:smart_kagaj/services/functions.dart';
+import 'package:smart_kagaj/pages/contract_page.dart';
 import 'package:smart_kagaj/utils/constants.dart';
 import 'package:web3dart/web3dart.dart';
 import '../commonWidgets/custom_snackbar.dart';
 import '../commonWidgets/date_Input_field.dart';
 import '../commonWidgets/input_filed.dart';
 import '../commonWidgets/onboarding_background.dart';
-
-String calculateMD5(String input) {
-  var bytes = utf8.encode(input); // Encode the input string as bytes
-  var md5Hash = md5.convert(bytes); // Calculate the MD5 hash
-  return md5Hash.toString(); // Convert the hash to a string
-}
 
 class CreateContractPage extends StatefulWidget {
   const CreateContractPage({super.key});
@@ -47,8 +43,18 @@ class _CreateContractPageState extends State<CreateContractPage> {
   final contractAuthNameController = TextEditingController();
   final contractAuthHashController = TextEditingController();
   User user = FirebaseAuth.instance.currentUser!;
+  String generateRandomAddress() {
+    final random = Random();
+    const hexChars = "0123456789ABCDEF";
+    String address = '0x';
+    for (int i = 0; i < 40; i++) {
+      address += hexChars[random.nextInt(16)];
+    }
+    return address;
+  }
 
   Future<void> _createContract() async {
+    String randomNUmber = generateRandomAddress();
     EasyLoading.show(
       status: 'Processing...',
       maskType: EasyLoadingMaskType.black,
@@ -64,17 +70,52 @@ class _CreateContractPageState extends State<CreateContractPage> {
     ContractDB.contractAuthHash =
         calculateMD5("$FirebaseDB.userName$FirebaseDB.citizenshipNumber");
     ContractDB.printall();
-    createContract(
-        ContractAddress,
-        DateTime.now().millisecondsSinceEpoch,
-        ContractDB.contractName!,
-        ContractDB.contractDescription!,
-        ContractDB.contractContent!,
-        ContractDB.contractTermsAndCondition!,
-        int.parse(ContractDB.contractTotalSigners!),
-        ContractDB.contractAuthName!,
-        ContractDB.contractAuthHash!,
-        ethClient!);
+    ContractDB.addcontractToListInFirestore(
+        context: context,
+        contractAddress: randomNUmber,
+        contractData: {
+          "date": ContractDB.date,
+          "contractName": ContractDB.contractName,
+          "contractDescription": ContractDB.contractDescription,
+          "contractContent": ContractDB.contractContent,
+          "contractTermsAndCondition": ContractDB.contractTermsAndCondition,
+          "contractTotalSigners": ContractDB.contractTotalSigners,
+          "contractAuthName": ContractDB.contractAuthName,
+          "contractAuthHash": ContractDB.contractAuthHash,
+          "contractAddress": randomNUmber,
+          "Signers": [
+            {"date": ".........", "name": ".........", "hash": "........"},
+            {"date": ".........", "name": ".........", "hash": "........"},
+          ]
+        });
+    ContractDB.addContractHashToFirestore(
+        contractHash: randomNUmber, context: context);
+    Navigator.of(context).pushReplacement(SmoothSlidePageRoute(
+        page: ContractPage(
+      documentName: randomNUmber,
+    )));
+    // ContractDB.editContractInFirestore(
+    //     contractAddress: ContractAddress,
+    //     updatedContractData: {
+    //       "date": ContractDB.date,
+    //       "contractName": ContractDB.contractName,
+    //       "contractDescription": ContractDB.contractDescription,
+    //       "contractContent": ContractDB.contractContent,
+    //       "contractTermsAndCondition": ContractDB.contractTermsAndCondition,
+    //       "contractTotalSigners": ContractDB.contractTotalSigners,
+    //       "contractAuthName": ContractDB.contractAuthName,
+    //       "contractAuthHash": ContractDB.contractAuthHash,
+    //       "contractAddress": ContractAddress,
+    //     },
+    //     context: context);
+
+    // ContractDB.fetchContractFromFirestore(
+    //   context: context,
+    //   contractAddress: ContractAddress,
+    // );
+    // ContractDB.deleteContractInFirestore(
+    //     contractAddress: ContractAddress, context: context);
+
     EasyLoading.dismiss();
   }
 
@@ -102,6 +143,10 @@ class _CreateContractPageState extends State<CreateContractPage> {
 
   @override
   Widget build(BuildContext context) {
+    ContractDB.fetchContractFromFirestore(
+      context: context,
+      contractAddress: ContractAddress,
+    );
     return GestureDetector(
       onTap: () => {FocusScope.of(context).requestFocus(FocusNode())},
       child: OnbodingScreenBackground(
@@ -125,6 +170,10 @@ class _CreateContractPageState extends State<CreateContractPage> {
                               child: Lottie.asset(
                                   "assets/Lottie/createContract.json"),
                             )),
+                        Text(
+                          "Create a new contract",
+                          style: kwhiteboldTextStyle.copyWith(fontSize: 30),
+                        ),
                         const SizedBox(
                           height: 20,
                         ),
@@ -163,7 +212,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
                         InputField(
                           isrequired: true,
                           controllerss: contractDescriptionController,
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.text,
                           labelText: "Contract Description",
                           prefixIcon: Icons.money,
                           hintText:
@@ -187,7 +236,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
                         InputField(
                           isrequired: true,
                           controllerss: contractTermsAndConditionController,
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.text,
                           labelText: "Terms and Conditions",
                           prefixIcon: Icons.money,
                           hintText:
@@ -199,7 +248,7 @@ class _CreateContractPageState extends State<CreateContractPage> {
                         InputField(
                           isrequired: true,
                           controllerss: contractAuthNameController,
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.text,
                           labelText: "Auth Name",
                           prefixIcon: Icons.money,
                           hintText: "Prashant, Shyam",

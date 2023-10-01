@@ -5,9 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
 import 'package:rive/rive.dart';
+import 'package:smart_kagaj/commonWidgets/hashgenerator.dart';
+import 'package:smart_kagaj/database/contact.dart';
+import 'package:smart_kagaj/database/firebase.dart';
 import '../commonWidgets/PinEntry/numPad.dart';
 import '../commonWidgets/PinEntry/pinEntryField.dart';
 import '../commonWidgets/animated_button.dart';
@@ -18,9 +22,14 @@ import '../constant/fonts.dart';
 import '../database/mPIN.dart';
 
 class CheckMPIN extends StatefulWidget {
-  const CheckMPIN({super.key, required this.nextPage});
+  const CheckMPIN(
+      {this.contractAddress = "Ads",
+      this.isContract = false,
+      super.key,
+      required this.nextPage});
   final Widget nextPage;
-
+  final bool isContract;
+  final String contractAddress;
   @override
   State<CheckMPIN> createState() => _CheckMPINState();
 }
@@ -90,6 +99,87 @@ class _CheckMPINState extends State<CheckMPIN> {
                           _pinControllers[3].text;
                       if (inputedPIN == MPIN.retrievePIN) {
                         EasyLoading.showSuccess('PIN is valid');
+                        if (widget.isContract) {
+                          if (ContractDB.Signers?[0]["hash"] == null) {
+                            ContractDB.editContractInFirestore(
+                                context: context,
+                                contractAddress: widget.contractAddress,
+                                updatedContractData: {
+                                  "date": ContractDB.date,
+                                  "contractName": ContractDB.contractName,
+                                  "contractDescription":
+                                      ContractDB.contractDescription,
+                                  "contractContent": ContractDB.contractContent,
+                                  "contractTermsAndCondition":
+                                      ContractDB.contractTermsAndCondition,
+                                  "contractTotalSigners":
+                                      ContractDB.contractTotalSigners,
+                                  "contractAuthName":
+                                      ContractDB.contractAuthName,
+                                  "contractAuthHash":
+                                      ContractDB.contractAuthHash,
+                                  "contractAddress": widget.contractAddress,
+                                  "Signers": [
+                                    {
+                                      "date": DateFormat('yyyy-MM-dd')
+                                          .format(DateTime.now())
+                                          .toString(),
+                                      "name": FirebaseDB.userName,
+                                      "hash": calculateMD5(
+                                          "$FirebaseDB.userName$FirebaseDB.citizenshipNumber"),
+                                    },
+                                    {"date": Null, "name": Null, "hash": Null},
+                                  ]
+                                });
+                            customSnackbar(
+                              context: context,
+                              text: "Contract is sucessfully signed",
+                              icons: Icons.done,
+                              iconsColor: Colors.green,
+                            );
+                          } else {
+                            ContractDB.editContractInFirestore(
+                                context: context,
+                                contractAddress: widget.contractAddress,
+                                updatedContractData: {
+                                  "date": ContractDB.date,
+                                  "contractName": ContractDB.contractName,
+                                  "contractDescription":
+                                      ContractDB.contractDescription,
+                                  "contractContent": ContractDB.contractContent,
+                                  "contractTermsAndCondition":
+                                      ContractDB.contractTermsAndCondition,
+                                  "contractTotalSigners":
+                                      ContractDB.contractTotalSigners,
+                                  "contractAuthName":
+                                      ContractDB.contractAuthName,
+                                  "contractAuthHash":
+                                      ContractDB.contractAuthHash,
+                                  "contractAddress": widget.contractAddress,
+                                  "Signers": [
+                                    {
+                                      "date": ContractDB.Signers?[0]["date"],
+                                      "name": ContractDB.Signers?[0]["name"],
+                                      "hash": ContractDB.Signers?[0]["hash"],
+                                    },
+                                    {
+                                      "date": DateFormat('yyyy-MM-dd')
+                                          .format(DateTime.now())
+                                          .toString(),
+                                      "name": FirebaseDB.userName,
+                                      "hash": calculateMD5(
+                                          "$FirebaseDB.userName$FirebaseDB.citizenshipNumber"),
+                                    },
+                                  ]
+                                });
+                            customSnackbar(
+                              context: context,
+                              text: "Contract is sucessfully signed",
+                              icons: Icons.done,
+                              iconsColor: Colors.green,
+                            );
+                          }
+                        }
                         Navigator.of(context).pushReplacement(
                             SmoothSlidePageRoute(page: widget.nextPage));
                       } else {

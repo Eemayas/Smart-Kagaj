@@ -1,7 +1,9 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
+// ignore_for_file: use_build_context_synchronously, avoid_print, non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_kagaj/Provider/provider.dart';
+import 'package:smart_kagaj/utils/constants.dart';
 
 import '../commonWidgets/custom_snackbar.dart';
 
@@ -14,131 +16,222 @@ class ContractDB {
   static String? contractTotalSigners;
   static String? contractAuthName;
   static String? contractAuthHash;
-  static List ContractList = [];
+  static List<Map<String, String>>? Signers;
+  static List? contractsHashess;
+  static List ContractDetail = [
+    {
+      "date": ContractDB.date,
+      "contractName": ContractDB.contractName,
+      "contractDescription": ContractDB.contractDescription,
+      "contractContent": ContractDB.contractContent,
+      "contractTermsAndCondition": ContractDB.contractTermsAndCondition,
+      "contractTotalSigners": ContractDB.contractTotalSigners,
+      "contractAuthName": ContractDB.contractAuthName,
+      "contractAuthHash": ContractDB.contractAuthHash,
+      "contractAddress": ContractAddress,
+      "Signers": Signers
+    }
+  ];
   static void printall() {
     print(
         "dateController:$date\ncontractNameController:$contractName\ncontractDescriptionController:$contractDescription}\ncontractContentController:$contractContent\ncontractTermsAndConditionController:$contractTermsAndCondition\ncontractTotalSignersController:$contractTotalSigners\ncontractAuthNameController:$contractAuthName \n contractAuthHashController: $contractAuthHash");
   }
 
-  // static Future<bool> addDocumentImageToListInFirestore(
-  //     { required Map contractDeatils,
-  //     required BuildContext context}) async {
-  //   try {
-  //     final firestoreInstance = FirebaseFirestore.instance;
-  //     final collectionReference = firestoreInstance
-  //         .collection('Contract_list')
-  //     // Fetch the current list from Firestore
-  //     final DocumentImageSnapshot =
-  //         await collectionReference.doc('myContracts').get();
-  //     final List<dynamic> currentList =
-  //         DocumentImageSnapshot.data()?['Contact_List'] ?? [];
-  //     // Append the new data
-  //     currentList.add(newDocumentImageUrl);
-  //     documentImagesNameList = currentList;
-  //     // Update the list in Firestore
-  //     await collectionReference.doc('myDocumentImage').update({
-  //       'DocumentImagesNameList': currentList,
-  //     });
-  //     context.read<ChangedMsg>().changed();
-  //     return true;
-  //   } catch (e) {
-  //     print('Error adding data to Firestore list: $e');
-  //     return false;
-  //   }
-  // }
-
-  // static Future<bool> uploadContractDetails(
-  //     {required BuildContext context, required userUid}) async {
-  //   try {
-  //     await FirebaseFirestore.instance
-  //         .collection("Personal_Detail")
-  //         .collection("Contracts_Lists")
-  //         .doc(userUid)
-  //         .set({
-  //       'Username': userName,
-  //       'PhoneNumber': phoneNumber,
-  //       "Date of Birth": dateOfBirth,
-  //       "Profile Image URL": profileImageURL,
-  //       "Citizenship Number": citizenshipNumber,
-  //       "Citizenhip ImageURL": citizenshipImageURL,
-  //       "Citizenhip Issued Date": citizenshipIssuedDate,
-  //     });
-  //     print("User Details added to Firebase");
-  //     customSnackbar(
-  //       context: context,
-  //       icons: Icons.done_all,
-  //       iconsColor: Colors.green,
-  //       text: "User Details added to Firebase",
-  //     );
-  //     return true;
-  //   } catch (e) {
-  //     print("Error Adding user Details to Firebase : $e");
-  //     customSnackbar(
-  //       context: context,
-  //       text: "Error Adding user Details to Firebase : $e",
-  //     );
-  //     return false;
-  //   }
-  // }
-
-  // static Future<Map<String, dynamic>?> retrievePersonalDetail(
-  //     {required String userUid}) async {
-  //   try {
-  //     DocumentSnapshot snapshot = await FirebaseFirestore.instance
-  //         .collection("Personal_Detail")
-  //         .doc(userUid)
-  //         .get();
-  //     if (snapshot.exists) {
-  //       // Convert the snapshot data to a Map and return it
-  //       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-  //       print(data);
-  //       userName = data['Username'];
-  //       phoneNumber = data['PhoneNumber'];
-  //       dateOfBirth = data["Date of Birth"];
-  //       profileImageURL = data["Profile Image URL"];
-  //       citizenshipNumber = data["Citizenship Number"];
-  //       citizenshipImageURL = data["Citizenhip ImageURL"];
-  //       citizenshipIssuedDate = data["Citizenhip Issued Date"];
-  //       printall();
-  //       return data;
-  //     } else {
-  //       // Document does not exist
-  //       return null;
-  //     }
-  //   } catch (e) {
-  //     print("Error retrieving user details from Firebase: $e");
-  //     return null;
-  //   }
-  // }
-}
-
-// import 'package:cloud_firestore/cloud_firestore.dart';
-
-class FirebaseService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Add a contract to Firestore
-  static Future<void> addContract(Map<String, dynamic> contractData) async {
-    await _firestore.collection('contracts').add(contractData);
+  static Future<bool> addcontractToListInFirestore(
+      {required Map<String, dynamic> contractData,
+      contractAddress,
+      required BuildContext context}) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Contract_List")
+          .doc(contractAddress)
+          .set(contractData);
+      print("Contact Details added to Firebase");
+      customSnackbar(
+        context: context,
+        icons: Icons.done_all,
+        iconsColor: Colors.green,
+        text: "Contract Details added to Firebase",
+      );
+      return true;
+    } catch (e) {
+      print("Error Adding Contract Details to Firebase : $e");
+      customSnackbar(
+        context: context,
+        text: "Error Adding Contract Details to Firebase : $e",
+      );
+      return false;
+    }
   }
 
-  // Fetch all contracts from Firestore
-  static Stream<QuerySnapshot> getContracts() {
-    print(_firestore.collection('contracts').snapshots());
-    return _firestore.collection('contracts').snapshots();
+  static Future<bool> addContractHashToFirestore({
+    required String contractHash,
+    required BuildContext context,
+  }) async {
+    try {
+      final docRef =
+          FirebaseFirestore.instance.collection("Contract_hash").doc();
+
+      await docRef.set({'contractHash': contractHash});
+
+      print("Contract Hash added to Firebase with document ID: ${docRef.id}");
+      customSnackbar(
+        context: context,
+        icons: Icons.done_all,
+        iconsColor: Colors.green,
+        text: "Contract Hash added to Firebase",
+      );
+      return true;
+    } catch (e) {
+      print("Error Adding Contract Hash to Firebase: $e");
+      customSnackbar(
+        context: context,
+        text: "Error Adding Contract Hash to Firebase: $e",
+      );
+      return false;
+    }
   }
 
-  // Update a contract in Firestore
-  static Future<void> updateContract(
-      String contractId, Map<String, dynamic> updatedData) async {
-    await _firestore
-        .collection('contracts')
-        .doc(contractId)
-        .update(updatedData);
+  static Future<bool> editContractInFirestore({
+    required Map<String, dynamic> updatedContractData,
+    required String contractAddress,
+    required BuildContext context,
+  }) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Contract_List")
+          .doc(contractAddress)
+          .update(updatedContractData);
+      print("Contract Details updated in Firebase");
+      customSnackbar(
+        context: context,
+        icons: Icons.done_all,
+        iconsColor: Colors.green,
+        text: "Contract Details updated in Firebase",
+      );
+      return true;
+    } catch (e) {
+      print("Error updating Contract Details in Firebase : $e");
+      customSnackbar(
+        context: context,
+        text: "Error updating Contract Details in Firebase : $e",
+      );
+      return false;
+    }
   }
 
-  // Delete a contract from Firestore
-  static Future<void> deleteContract(String contractId) async {
-    await _firestore.collection('contracts').doc(contractId).delete();
+  static Future<bool> deleteContractInFirestore({
+    required String contractAddress,
+    required BuildContext context,
+  }) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Contract_List")
+          .doc(contractAddress)
+          .delete();
+      print("Contract Details deleted from Firebase");
+      customSnackbar(
+        context: context,
+        icons: Icons.done_all,
+        iconsColor: Colors.red,
+        text: "Contract Details deleted from Firebase",
+      );
+      return true;
+    } catch (e) {
+      print("Error deleting Contract Details from Firebase : $e");
+      customSnackbar(
+        context: context,
+        text: "Error deleting Contract Details from Firebase : $e",
+      );
+      return false;
+    }
+  }
+
+  static Future<bool> deleteContractHashFromFirestore(
+      String documentId, BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Contract_hash")
+          .doc(documentId)
+          .delete();
+
+      print("Contract Hash deleted from Firebase: $documentId");
+      customSnackbar(
+        context: context,
+        icons: Icons.done_all,
+        iconsColor: Colors.green,
+        text: "Contract Hash deleted from Firebase",
+      );
+      return true;
+    } catch (e) {
+      print("Error Deleting Contract Hash from Firebase: $e");
+      customSnackbar(
+        context: context,
+        text: "Error Deleting Contract Hash from Firebase: $e",
+      );
+      return false;
+    }
+  }
+
+  static Future<Map<String, dynamic>?> fetchContractFromFirestore({
+    required BuildContext context,
+    required String contractAddress,
+  }) async {
+    try {
+      final DocumentSnapshot contractSnapshot = await FirebaseFirestore.instance
+          .collection("Contract_List")
+          .doc(contractAddress)
+          .get();
+
+      if (contractSnapshot.exists) {
+        Map<String, dynamic> data =
+            contractSnapshot.data() as Map<String, dynamic>;
+
+        date = data["date"];
+        contractName = data["contractName"];
+        contractDescription = data["contractDescription"];
+        contractContent = data["contractContent"];
+        contractTermsAndCondition = data["contractTermsAndCondition"];
+        contractTotalSigners = data["contractTotalSigners"];
+        contractAuthName = data["contractAuthName"];
+        contractAuthHash = data["contractAuthHash"];
+        printall();
+        return contractSnapshot.data() as Map<String, dynamic>?;
+      } else {
+        customSnackbar(
+          context: context,
+          text: "Error fetching Contract Details from Firebase",
+        );
+        return null;
+      }
+    } catch (e) {
+      customSnackbar(
+        context: context,
+        text: "Error fetching Contract Details from Firebase: $e",
+      );
+      print("Error fetching Contract Details from Firebase: $e");
+      return null;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getAllContractHashes() async {
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection("Contract_hash").get();
+
+      List<Map<String, dynamic>> contractHashes = [];
+
+      querySnapshot.docs.forEach((doc) {
+        // Convert each document to a Map and add it to the list
+        contractHashes.add(doc.data() as Map<String, dynamic>);
+      });
+      contractsHashess = contractsHashess;
+      return contractHashes;
+    } catch (e) {
+      print("Error fetching Contract Hashes from Firebase: $e");
+      return [];
+    }
   }
 }
